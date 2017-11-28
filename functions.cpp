@@ -7,8 +7,10 @@
 using namespace std;
 
 
-bool checkList(vector<double> vec, int vbl){
+
+bool checkList(vector<vector<double> > vec, vector<double> vbl){
   //check is variable is in vector
+  //note that input must be as vectors
   if (find(vec.begin(),vec.end(),vbl) != vec.end()){
     return true;
   }
@@ -20,39 +22,73 @@ bool checkList(vector<double> vec, int vbl){
 
 //Easier at this stage to randomly calculate your positions without calling a function to do so (can come back to this later if necessary)
 
-double totalEnergy(int structure, int N, double J){
+double totalEnergy(vector<int> structure, int N,vector<double> J){
   //calculate the total energy of the stucture
+  //note that input must be as vectors
   
   int energy = 0;
   for(int i=0;i < (N-1);i++){
     energy = energy + J[structure[i]][structure[i+1]];
   }
-  
   return energy;
 }
 
-//to check
+//checked and working
 
-int moveTo(int current, int occupied){
+int moveTo(vector<int> current, vector<int> occupied){
   //find, if any, a position current amino acid can move to
-  
+  //note that input must be as vectors
   int x = current[0];
   int y = current[1];
-  int poss_moves = ((x+1,y),(x-1,y),(x,y+1),(x,y-1),(x+1,y+1),(x-1,y+1),(x+1,y-1),(x-1,y-1));
-  int to_delete = ();
+  vector<int> cd1;
+  cd1.push_back(x+1);
+  cd1.push_back(y);
+  vector<int> cd2;
+  cd2.push_back(x-1);
+  cd2.push_back(y);
+  vector<int> cd3;
+  cd3.push_back(x);
+  cd3.push_back(y+1);
+  vector<int> cd4;
+  cd4.push_back(x);
+  cd4.push_back(y-1);
+  vector<int> cd5;
+  cd5.push_back(x+1);
+  cd5.push_back(y+1);
+  vector<int> cd6;
+  cd6.push_back(x-1);
+  cd6.push_back(y+1);
+  vector<int> cd7;
+  cd7.push_back(x+1);
+  cd7.push_back(y-1);
+  vector<int> cd8;
+  cd8.push_back(x-1);
+  cd8.push_back(y-1);
+
+  vector<vector<int> > poss_moves;
+  poss_moves.push_back(cd1);
+  poss_moves.push_back(cd2);
+  poss_moves.push_back(cd3);
+  poss_moves.push_back(cd4);
+  poss_moves.push_back(cd5);
+  poss_moves.push_back(cd6);
+  poss_moves.push_back(cd7);
+  poss_moves.push_back(cd8);
+
+  vector<vector<int> > to_delete;
   for(int i=0;i < 8;i++){
     if (checkList(occupied,poss_moves[i] == true)){
-      to_delete.insert(poss_moves[i]);
+      to_delete.push_back(poss_moves[i]);
     }
   }  
-  for(int j=0;j < to_delete.size();j++){
-    poss_moves.remove(to_delete[j]);
+  for(int j=0;j < to_delete.size();j++){   
+    poss_moves.erase(find(poss_moves.being(),poss_moves.end(),to_delete[j]));
   }
   
   return poss_moves;
 }
 
-//to check
+//checked and working
 
 double canMove(int current, int occupied ,int poss_moves){
   //check to see if selected amino acid can move to a neighbouring point
