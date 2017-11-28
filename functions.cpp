@@ -6,6 +6,7 @@
 
 using namespace std;
 
+
 bool checkList(vector<double> vec, int vbl){
   //check is variable is in vector
   if (find(vec.begin(),vec.end(),vbl) != vec.end()){
@@ -15,16 +16,9 @@ bool checkList(vector<double> vec, int vbl){
     return false;
   }
 }
+//checked and working
 
-int randPos(int N){
-  //find a random position within the structure
-  
-  int rand1 = rand() % N;
-  int rand2 = rand() % N;
-  int array[2] = {rand1,rand2};
-  return array
-
-}
+//Easier at this stage to randomly calculate your positions without calling a function to do so (can come back to this later if necessary)
 
 double totalEnergy(int structure, int N, double J){
   //calculate the total energy of the stucture
@@ -36,6 +30,8 @@ double totalEnergy(int structure, int N, double J){
   
   return energy;
 }
+
+//to check
 
 int moveTo(int current, int occupied){
   //find, if any, a position current amino acid can move to
@@ -56,6 +52,8 @@ int moveTo(int current, int occupied){
   return poss_moves;
 }
 
+//to check
+
 double canMove(int current, int occupied ,int poss_moves){
   //check to see if selected amino acid can move to a neighbouring point
   int list_position = find(occupied.begin(),occupied.end(),current);
@@ -73,12 +71,18 @@ double canMove(int current, int occupied ,int poss_moves){
   }
 }
 
+//to check
+
 double doMove(double E_move, int current, int target){
   //move the selected amino acid to the target position
 }
+
+//to check
 
 double length(int occupied, int N){
   //calculate the 'crow flies' distance between protein start and end points
 
   return (((occupied[0][0]-occupied[N-1])**2)+((occupied[0][1]-structure[N-1][1])**2))**0.5;
 }
+
+//to check
