@@ -7,7 +7,6 @@
 using namespace std;
 
 
-
 bool checkList(vector<vector<double> > vec, vector<double> vbl){
   //check is variable is in vector
   //note that input must be as vectors
@@ -18,6 +17,7 @@ bool checkList(vector<vector<double> > vec, vector<double> vbl){
     return false;
   }
 }
+
 //checked and working
 
 //Easier at this stage to randomly calculate your positions without calling a function to do so (can come back to this later if necessary)
@@ -35,7 +35,7 @@ double totalEnergy(vector<int> structure, int N,vector<double> J){
 
 //checked and working
 
-int moveTo(vector<int> current, vector<int> occupied){
+vector<vector<int> > moveTo(vector<int> current, vector<vector<int> > occupied){
   //find, if any, a position current amino acid can move to
   //note that input must be as vectors
   int x = current[0];
@@ -90,35 +90,37 @@ int moveTo(vector<int> current, vector<int> occupied){
 
 //checked and working
 
-double canMove(int current, int occupied ,int poss_moves){
+vector<vector<int> > canMove(vector<int> current, vector<vector<int> > occupied ,vector<vector<int> > poss_moves){
   //check to see if selected amino acid can move to a neighbouring point
   int list_position = find(occupied.begin(),occupied.end(),current);
-  int prev = occupied[list_position-1];
-  int next = occupied[list_position+1];
-  int moves = ();
+  vector<int> prev = occupied[list_position-1];
+  vector<int> next = occupied[list_position+1];
+  vector<vector<int> > moves;
   for(int i=0;i < poss_moves.size();i++){
-    int x = poss_moves[0];
-    int y = poss_moves[1];
+    int x = poss_moves[i][0];
+    int y = poss_moves[i][1];
     if (prev[0]+1 == x || prev[0]-1 == x || prev[1]+1 == y || prev[1]-1 == y){
       if (next[0]+1 == x || next[0]-1 == x || next[1]+1 == y || next[1]-1 == y){
-	moves.insert(poss_moves[i]);
+	moves.push_back(poss_moves[i]);
       }
     }
   }
+  return moves;
 }
 
 //to check
 
 double doMove(double E_move, int current, int target){
   //move the selected amino acid to the target position
+  
 }
 
 //to check
 
-double length(int occupied, int N){
+double length(vector<vector<int> > occupied, int N){
   //calculate the 'crow flies' distance between protein start and end points
 
-  return (((occupied[0][0]-occupied[N-1])**2)+((occupied[0][1]-structure[N-1][1])**2))**0.5;
+  return pow(pow((occupied[0][0]-occupied[N-1][0]),2.0)+pow((occupied[0][1]-occupied[N-1][1]),2.0),0.5);  
 }
 
-//to check
+//checked and working

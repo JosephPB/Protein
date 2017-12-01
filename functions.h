@@ -6,6 +6,7 @@
 #include<stdlib.h>
 #include<list>
 #include<algorithm>
+#include<math.h>
 
 bool checklist(int list, int variable);
 
