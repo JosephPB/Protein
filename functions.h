@@ -7,20 +7,22 @@
 #include<list>
 #include<algorithm>
 #include<math.h>
+#include<time.h>
+#include<vector>
 
-bool checklist(int list, int variable);
+using namespace std;
 
-int randPos(int N);
+//bool checkList(vector<vector<double> > vec, vector<double> vbl)
 
-double totalEnergy(int structure, int N, double J);
+//double totalEnergy(vector<int> structure, int N, vector<vector<double> > J);
 
-int moveTo(int current, int occupied);
+//int moveTo(vector<int> current, vector<vector<int> > occupied);
 
-double canMove(int current, int occupied, int poss_moves);
+//double canMove(int current, int occupied, int poss_moves);
 
-double doMove(double E_move, int current, int target);
+//double doMove(double E_move, int current, int target);
 
-double length(int occupied, int N);
+//double length(vector<vector<int> > occupied, int N);
 
 #endif
 

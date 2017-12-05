@@ -1,3 +1,11 @@
-functions: functions.cpp
+protein: protein.o functions.o
+	g++ -o protein protein.o functions.o
 
-	g++ -Wall -g functions.cpp
+protein.o : protein.cpp
+	g++ -c protein.cpp
+
+functions.o : functions.cpp
+	g++ -c functions.cpp
+
+clean :
+	rm protein protein.o functions.o

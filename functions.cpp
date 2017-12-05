@@ -1,13 +1,9 @@
-#include<iostream>
 #include"functions.h"
-#include<stdlib.h>
-#include<list>
-#include<algorithm>
 
 using namespace std;
 
 
-bool checkList(vector<vector<double> > vec, vector<double> vbl){
+bool checkList(vector<vector<int> > vec, vector<int> vbl){
   //check is variable is in vector
   //note that input must be as vectors
   if (find(vec.begin(),vec.end(),vbl) != vec.end()){
@@ -22,7 +18,7 @@ bool checkList(vector<vector<double> > vec, vector<double> vbl){
 
 //Easier at this stage to randomly calculate your positions without calling a function to do so (can come back to this later if necessary)
 
-double totalEnergy(vector<int> structure, int N,vector<double> J){
+double totalEnergy(vector<int> structure, int N,vector<vector<double> > J){
   //calculate the total energy of the stucture
   //note that input must be as vectors
   
@@ -77,12 +73,12 @@ vector<vector<int> > moveTo(vector<int> current, vector<vector<int> > occupied){
 
   vector<vector<int> > to_delete;
   for(int i=0;i < 8;i++){
-    if (checkList(occupied,poss_moves[i] == true)){
+    if (checkList(occupied,poss_moves[i]) == true){
       to_delete.push_back(poss_moves[i]);
     }
   }  
   for(int j=0;j < to_delete.size();j++){   
-    poss_moves.erase(find(poss_moves.being(),poss_moves.end(),to_delete[j]));
+    poss_moves.erase(find(poss_moves.begin(),poss_moves.end(),to_delete[j]));
   }
   
   return poss_moves;
@@ -92,7 +88,8 @@ vector<vector<int> > moveTo(vector<int> current, vector<vector<int> > occupied){
 
 vector<vector<int> > canMove(vector<int> current, vector<vector<int> > occupied ,vector<vector<int> > poss_moves){
   //check to see if selected amino acid can move to a neighbouring point
-  int list_position = find(occupied.begin(),occupied.end(),current);
+  vector<vector<int> >::iterator it = find(occupied.begin(),occupied.end(),current);
+  int list_position = distance(occupied.begin(),it);
   vector<int> prev = occupied[list_position-1];
   vector<int> next = occupied[list_position+1];
   vector<vector<int> > moves;
