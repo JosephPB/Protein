@@ -9,14 +9,17 @@
 #include<math.h>
 #include<time.h>
 #include<vector>
+#include<sstream>
+#include<fstream>
+#include<iterator>
 
 using namespace std;
 
-//bool checkList(vector<vector<double> > vec, vector<double> vbl)
+bool checkList(int vec[][2],int vbl[],int N);
 
-//double totalEnergy(vector<int> structure, int N, vector<vector<double> > J);
+double totalEnergy(int structure[],int N,double J[20][20]);
 
-//int moveTo(vector<int> current, vector<vector<int> > occupied);
+void moveTo(int current[],int occupied[][2],int N,vector<vector<int> >& vec_poss_moves);
 
 //double canMove(int current, int occupied, int poss_moves);
 
