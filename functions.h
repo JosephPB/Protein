@@ -15,17 +15,17 @@
 
 using namespace std;
 
-bool checkList(int vec[][2],int vbl[],int N);
+int checkList(int vec[][2],int vbl[],int N);
 
-double totalEnergy(int structure[],int N,double J[20][20]);
+double totalEnergy(int structure[],int occupied[][2],int N,double J[20][20]);
 
 void moveTo(int current[],int occupied[][2],int N,vector<vector<int> >& vec_poss_moves);
 
-//double canMove(int current, int occupied, int poss_moves);
+void canMove(int current[],int position, int occupied[][2],int N,vector<vector<int> > vec_poss_moves,vector<vector<int> >& vec_final_poss_moves);
 
-//double doMove(double E_move, int current, int target);
+double doMove(double E_move,int occupied[][2],int position,int target[], int temperature);
 
-//double length(vector<vector<int> > occupied, int N);
+double length(int occupied[][2], int N);
 
 #endif
 

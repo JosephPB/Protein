@@ -1,43 +1,49 @@
 #include"functions.h"
 
-bool checkList(int vec[][2],int vbl[],int N){
+int checkList(int vec[][2],int vbl[],int N){
   //check is variable is in array
-  bool is_in = false;
+  int is_in = -1;
   for(int z = 0; z < N; z++){
     if(vec[z][0] == vbl[0] && vec[z][1] == vbl[1]){
-      is_in = true;
+      is_in = z;
       break;
     }
   }
   return is_in;
 }
 
-//checked and working
-
-double totalEnergy(int structure[],int N,double J[20][20]){
+double totalEnergy(int structure[],int occupied[][2],int N,double J[20][20]){
   //calculate the total energy of the stucture
-  //note that input must be as vectors
-  
+  vector<vector<int> > vec_neighbours;
   int energy = 0;
-  for(int w=0;w < (N-1);w++){
-    energy = energy + J[structure[w]][structure[w+1]];
+  for(int w = 0; w < N; w++){
+    int x = occupied[w][0];
+    int y = occupied[w][1];
+
+    int poss_positions[4][2] = {{x+1,y},{x-1,y},{x,y+1},{x,y-1}};
+    
+    //check if poss_moves coordinates are occupied
+    for(int v = 0; v < 4; v++){
+      int check = checkList(occupied,poss_positions[v],N);
+      if(check != -1 && check != w+1 && check != w-1){	
+	energy = energy + J[structure[w]][structure[check]];
+      }
+    }
   }
+  energy = energy/2;
   return energy;
 }
 
-//checked and working
-
 void moveTo(int current[],int occupied[][2],int N, vector<vector<int> >& vec_poss_moves){
   //find, if any, a position current amino acid can move to
-  //----think about wrapping----
   int x = current[0];
   int y = current[1];
 
-  int poss_moves[8][2] = {{x+1,y},{x-1,y},{x,y+1},{x,y-1},{x+1,y+1},{x-1,y+1},{x+1,y-1},{x-1,y+1}};
+  int poss_moves[8][2] = {{x+1,y},{x-1,y},{x,y+1},{x,y-1},{x+1,y+1},{x-1,y+1},{x+1,y-1},{x-1,y-1}};
 
   //check if poss_moves coordinates are occupied
-  for(int v = 0;v < 8;v++){
-    if(checkList(occupied,poss_moves[v],N) == false){
+  for(int v = 0; v < 8; v++){
+    if(checkList(occupied,poss_moves[v],N) == -1){
       vector<int> to_add;
       to_add.push_back(poss_moves[v][0]);
       to_add.push_back(poss_moves[v][1]);
@@ -46,41 +52,73 @@ void moveTo(int current[],int occupied[][2],int N, vector<vector<int> >& vec_pos
   }
 }
  
-//checked and working
-/*
-vector<vector<int> > canMove(vector<int> current, vector<vector<int> > occupied ,vector<vector<int> > poss_moves){
+void canMove(int current[],int position, int occupied[][2],int N,vector<vector<int> > vec_poss_moves,vector<vector<int> >& vec_final_poss_moves){
   //check to see if selected amino acid can move to a neighbouring point
-  vector<vector<int> >::iterator it = find(occupied.begin(),occupied.end(),current);
-  int list_position = distance(occupied.begin(),it);
-  vector<int> prev = occupied[list_position-1];
-  vector<int> next = occupied[list_position+1];
-  vector<vector<int> > moves;
-  for(int i=0;i < poss_moves.size();i++){
-    int x = poss_moves[i][0];
-    int y = poss_moves[i][1];
-    if (prev[0]+1 == x || prev[0]-1 == x || prev[1]+1 == y || prev[1]-1 == y){
-      if (next[0]+1 == x || next[0]-1 == x || next[1]+1 == y || next[1]-1 == y){
-	moves.push_back(poss_moves[i]);
+  //accounting for end amino acid cases
+  if(position == 0){
+    int nextx = occupied[position+1][0];
+    int nexty = occupied[position+1][1];
+    for(int i = 0; i < vec_poss_moves.size(); i++){
+      int x = vec_poss_moves[i][0];
+      int y = vec_poss_moves[i][1];
+      if(pow(pow((x-nextx),2.0)+pow((y-nexty),2.0),0.5) == 1){
+	vec_final_poss_moves.push_back(vec_poss_moves[i]);
       }
     }
   }
-  return moves;
+  else if(position == N){
+    int prevx = occupied[position-1][0];
+    int prevy = occupied[position-1][1];
+    for(int i = 0; i < vec_poss_moves.size(); i++){
+      int x = vec_poss_moves[i][0];
+      int y = vec_poss_moves[i][1];
+      if(pow(pow((x-prevx),2.0)+pow((y-prevy),2.0),0.5) == 1){
+	vec_final_poss_moves.push_back(vec_poss_moves[i]);
+      }
+    }
+  }
+  else{
+    int prevx = occupied[position-1][0];
+    int prevy = occupied[position-1][1];
+    int nextx = occupied[position+1][0];
+    int nexty = occupied[position+1][1];
+    for(int i = 0; i < vec_poss_moves.size(); i++){
+      int x = vec_poss_moves[i][0];
+      int y = vec_poss_moves[i][1];
+      if((pow(pow((x-prevx),2.0)+pow((y-prevy),2.0),0.5) == 1) && //
+	 (pow(pow((x-nextx),2.0)+pow((y-nexty),2.0),0.5) == 1)){
+	vec_final_poss_moves.push_back(vec_poss_moves[i]);
+      }
+    }
+  }
 }
 
-//to check
-
-double doMove(double E_move, int current, int target){
-  //move the selected amino acid to the target position
-  
+double doMove(double E_move,int occupied[][2],int position,int target[], int temperature){
+  //move the selected amino acid to the target position if it satisfies the conditions
+  if(E_move < 0){
+    cout << "moving will lower energy, moving... \n";
+    occupied[position][0] = target[0];
+    occupied[position][1] = target[1];
+  }
+  else{
+    double boltzmann_constant = 1.38064852*pow(10,-23);
+    double boltzmann = exp(E_move/(boltzmann_constant*temperature)) * 100;
+    cout << "fluctuation enegy is: " << boltzmann << "\n";
+    srand(time(NULL));
+    double random = (rand() % 100);
+    cout << "random barrier is: " <<  random << "\n";
+    if(boltzmann > random){
+      cout << "energy fluctuations greater than random barrier, moving... \n";
+      occupied[position][0] = target[0];
+      occupied[position][1] = target[1];
+    }
+  }
 }
 
-//to check
+//REMEMBER TO CORRECT 100s
 
-double length(vector<vector<int> > occupied, int N){
+double length(int occupied[][2], int N){
   //calculate the 'crow flies' distance between protein start and end points
 
   return pow(pow((occupied[0][0]-occupied[N-1][0]),2.0)+pow((occupied[0][1]-occupied[N-1][1]),2.0),0.5);  
-}
-
-//checked and working
-*/
+  }
