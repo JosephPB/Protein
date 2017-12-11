@@ -40,7 +40,6 @@ int main(int argc, char *argv[]){
     int coord = rand() % 2;
     if(coord == 0){
       int step = rand() % 2;
-      cout << step << "\n";
       int to_add[2] = {pro_pos[d-1][0]+steps[step],pro_pos[d-1][1]};
       if(checkList(pro_pos,to_add,d) == -1){
 	pro_pos[d][0] = to_add[0];
@@ -50,7 +49,6 @@ int main(int argc, char *argv[]){
     }
     if(coord == 1){
       int step = rand() % 2;
-      cout << step << "\n";
       int to_add[2] = {pro_pos[d-1][0],pro_pos[d-1][1]+steps[step]};
       if(checkList(pro_pos,to_add,d) == -1){
 	pro_pos[d][0] = to_add[0];
@@ -106,7 +104,7 @@ int main(int argc, char *argv[]){
       copy(&pro_pos[0][0], &pro_pos[0][0]+pro_len*2, &newpro_pos[0][0]);
       newpro_pos[randpos][0] = to_move[0];
       newpro_pos[randpos][1] = to_move[1];
-      double deltaE = totalEnergy(pro_structure,newpro_pos,pro_len,energy_mat) - totalEnergy(pro_structure,pro_pos,pro_len,energy_mat); //POTENTIAL FPE HERE
+      double deltaE = totalEnergy(pro_structure,newpro_pos,pro_len,energy_mat) - totalEnergy(pro_structure,pro_pos,pro_len,energy_mat);
 
       cout << "energy difference is: " << deltaE << "\n";
     

@@ -93,7 +93,7 @@ void canMove(int current[],int position, int occupied[][2],int N,vector<vector<i
   }
 }
 
-double doMove(double E_move,int occupied[][2],int position,int target[], int temperature){
+void doMove(double E_move,int occupied[][2],int position,int target[], int temperature){
   //move the selected amino acid to the target position if it satisfies the conditions
   if(E_move < 0){
     cout << "moving will lower energy, moving... \n";

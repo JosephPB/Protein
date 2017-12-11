@@ -23,7 +23,7 @@ void moveTo(int current[],int occupied[][2],int N,vector<vector<int> >& vec_poss
 
 void canMove(int current[],int position, int occupied[][2],int N,vector<vector<int> > vec_poss_moves,vector<vector<int> >& vec_final_poss_moves);
 
-double doMove(double E_move,int occupied[][2],int position,int target[], int temperature);
+void doMove(double E_move,int occupied[][2],int position,int target[], int temperature);
 
 double length(int occupied[][2], int N);
 
