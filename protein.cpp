@@ -1,13 +1,16 @@
 #include"functions.h"
 
 int main(int argc, char *argv[]){
-  //CHECK IF ARGC == 0
-  int pro_len = atoi(argv[1]);
-  int temp = 30;
-  //int timer = argv[2];
+  int pro_len;
+  cout << "Number of amino acids in protein chain: ";
+  cin >> pro_len;
+  int temp;
+  cout << "Temperature: ";
+  cin >> temp;
+  int timer;
+  cout << "Number of Monte Carlo time steps: ";
+  cin >> timer;
  
-  //int counter = 0
-
   //initialise the random seed to be time
   srand(time(NULL));
 
@@ -69,70 +72,74 @@ int main(int argc, char *argv[]){
 
   cout << "energy is: " << totalEnergy(pro_structure,pro_pos,pro_len,energy_mat) << "\n";
   
-  //choose a an amino acid at random
-  int randpos = rand() % pro_len;
-  int pro_current[2] = {pro_pos[randpos][0],pro_pos[randpos][1]};
+  int counter = 0;
 
-  //find, if any, the possible positions the selected amino acid can move to
-  vector<vector<int> > vec_possmoves;
-  moveTo(pro_current, pro_pos,pro_len,vec_possmoves);
-  vector<vector<int> > vec_finalpossmoves;
-  if(vec_possmoves.size() != 0){
-    canMove(pro_current,randpos,pro_pos,pro_len,vec_possmoves,vec_finalpossmoves);
-    if(vec_finalpossmoves.size() != 0){
-      cout << "final moves are: ";
-      for(int i = 0; i < vec_finalpossmoves.size(); i++){
-	cout << "(";
-	for(int j = 0; j < 2; j++){
-	  cout << vec_finalpossmoves[i][j] << ",";
+  while(counter != timer){
+    //choose a an amino acid at random
+    int randpos = rand() % pro_len;
+    int pro_current[2] = {pro_pos[randpos][0],pro_pos[randpos][1]};
+
+    //find, if any, the possible positions the selected amino acid can move to
+    vector<vector<int> > vec_possmoves;
+    moveTo(pro_current, pro_pos,pro_len,vec_possmoves);
+    vector<vector<int> > vec_finalpossmoves;
+    if(vec_possmoves.size() != 0){
+      canMove(pro_current,randpos,pro_pos,pro_len,vec_possmoves,vec_finalpossmoves);
+      if(vec_finalpossmoves.size() != 0){
+	cout << "final moves are: ";
+	for(int i = 0; i < vec_finalpossmoves.size(); i++){
+	  cout << "(";
+	  for(int j = 0; j < 2; j++){
+	    cout << vec_finalpossmoves[i][j] << ",";
+	  }
+	  cout << ")";
 	}
-	cout << ")";
-      }
-      cout << "\n";
+	cout << "\n";
 
     
-      //account for more than one possible move
-      int randpos2 = rand() % vec_finalpossmoves.size();
-      int to_move[2];
-      to_move[0] = vec_finalpossmoves[randpos2][0];
-      to_move[1] = vec_finalpossmoves[randpos2][1];
+	//account for more than one possible move
+	int randpos2 = rand() % vec_finalpossmoves.size();
+	int to_move[2];
+	to_move[0] = vec_finalpossmoves[randpos2][0];
+	to_move[1] = vec_finalpossmoves[randpos2][1];
 
-      cout << "want to move (" << pro_pos[randpos][0] << "," << pro_pos[randpos][1] << ") to (" << to_move[0] << "," << to_move[1] << ")\n";
+	cout << "want to move (" << pro_pos[randpos][0] << "," << pro_pos[randpos][1] << ") to (" << to_move[0] << "," << to_move[1] << ")\n";
     
-      //calculate energy difference
-      int newpro_pos[pro_len][2];
-      copy(&pro_pos[0][0], &pro_pos[0][0]+pro_len*2, &newpro_pos[0][0]);
-      newpro_pos[randpos][0] = to_move[0];
-      newpro_pos[randpos][1] = to_move[1];
-      double deltaE = totalEnergy(pro_structure,newpro_pos,pro_len,energy_mat) - totalEnergy(pro_structure,pro_pos,pro_len,energy_mat);
+	//calculate energy difference
+	int newpro_pos[pro_len][2];
+	copy(&pro_pos[0][0], &pro_pos[0][0]+pro_len*2, &newpro_pos[0][0]);
+	newpro_pos[randpos][0] = to_move[0];
+	newpro_pos[randpos][1] = to_move[1];
+	double deltaE = totalEnergy(pro_structure,newpro_pos,pro_len,energy_mat) - totalEnergy(pro_structure,pro_pos,pro_len,energy_mat);
 
-      cout << "energy difference is: " << deltaE << "\n";
+	cout << "energy difference is: " << deltaE << "\n";
     
-      /* move amino acid if the move lowers the energy or is less that the thermal
-	 fluctuations */
-      doMove(deltaE,pro_pos,randpos,to_move,temp);
+	/* move amino acid if the move lowers the energy or is less that the thermal
+	   fluctuations */
+	doMove(deltaE,pro_pos,randpos,to_move,temp);
 
-      cout << "moved\n";
-      for(int i = 0; i < pro_len; i++){
-	cout << "(";
-	for(int j = 0; j < 2; j++){
-	  cout << pro_pos[i][j] << ",";
+	cout << "moved\n";
+	for(int i = 0; i < pro_len; i++){
+	  cout << "(";
+	  for(int j = 0; j < 2; j++){
+	    cout << pro_pos[i][j] << ",";
+	  }
+	  cout << ")";
 	}
-	cout << ")";
-      }
-      cout << "\n";
-      cout << "new energy is: " << totalEnergy(pro_structure,pro_pos,pro_len,energy_mat) << "\n";
+	cout << "\n";
+	cout << "new energy is: " << totalEnergy(pro_structure,pro_pos,pro_len,energy_mat) << "\n";
 
-      //calculate the 'length' of the protein
-      double len = length(pro_pos,pro_len);
-      cout << "the crow flies length is: " << len << "\n";
+	//calculate the 'length' of the protein
+	double len = length(pro_pos,pro_len);
+	cout << "the crow flies length is: " << len << "\n";
+      }
+      else{
+	cout << "there are no possible final moves\n";
+      }
     }
     else{
-      cout << "there are no possible final moves\n";
+      cout << "there are no possible moves\n";
     }
-  }
-  else{
-    cout << "there are no possible moves\n";
   }
 
   //-----------------------------------------------------------------
