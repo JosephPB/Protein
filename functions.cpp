@@ -102,10 +102,10 @@ void doMove(double E_move,int occupied[][2],int position,int target[], int tempe
   }
   else{
     double boltzmann_constant = 1.38064852*pow(10,-23);
-    double boltzmann = exp(E_move/(boltzmann_constant*temperature)) * 100;
+    double boltzmann = exp(E_move/(boltzmann_constant*temperature));
     cout << "fluctuation enegy is: " << boltzmann << "\n";
     srand(time(NULL));
-    double random = (rand() % 100);
+    double random = (rand() % 100000)/100000;
     cout << "random barrier is: " <<  random << "\n";
     if(boltzmann > random){
       cout << "energy fluctuations greater than random barrier, moving... \n";
@@ -114,8 +114,6 @@ void doMove(double E_move,int occupied[][2],int position,int target[], int tempe
     }
   }
 }
-
-//REMEMBER TO CORRECT 100s
 
 double length(int occupied[][2], int N){
   //calculate the 'crow flies' distance between protein start and end points

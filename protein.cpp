@@ -27,9 +27,9 @@ int main(int argc, char *argv[]){
   double energy_mat [20][20];
   for(int b = 0; b < 20; b++){
     for(int c = 0; c <= b; c++){
-      int rd = (rand() % 100);
-      energy_mat[b][c] = rd;
-      energy_mat[c][b] = rd;
+      int rd = (rand() % 100000);
+      energy_mat[b][c] = rd/100000;
+      energy_mat[c][b] = rd/100000;
     }
   }
 
@@ -39,6 +39,7 @@ int main(int argc, char *argv[]){
   pro_pos[0][0] = 0;
   pro_pos[0][1] = 0;
   int d = 1;
+  int counter = 0;
   while(d != pro_len){
     int coord = rand() % 2;
     if(coord == 0){
@@ -49,6 +50,13 @@ int main(int argc, char *argv[]){
 	pro_pos[d][1] = to_add[1];
 	d = d + 1;
       }
+      else{
+	counter = counter + 1;
+	if(counter == pro_len * 5){
+	  cout << "time elapsed for random walk\n";
+	  return EXIT_FAILURE;
+	}
+      }
     }
     if(coord == 1){
       int step = rand() % 2;
@@ -57,6 +65,13 @@ int main(int argc, char *argv[]){
 	pro_pos[d][0] = to_add[0];
 	pro_pos[d][1] = to_add[1];
 	d = d + 1;
+      }
+      else{
+	counter = counter + 1;
+	if(counter == pro_len * 5){
+	  cout << "time elapsed for random walk\n";
+	  return EXIT_FAILURE;
+	}
       }
     }
   }
@@ -70,11 +85,30 @@ int main(int argc, char *argv[]){
   }
   cout << "\n";
 
-  cout << "energy is: " << totalEnergy(pro_structure,pro_pos,pro_len,energy_mat) << "\n";
+  double energy = totalEnergy(pro_structure,pro_pos,pro_len,energy_mat);
   
-  int counter = 0;
+  cout << "energy is: " << energy << "\n";
 
-  while(counter != timer){
+  double len = length(pro_pos,pro_len);
+
+  char cont;
+  cout << "Would you like to continue to the time steps? (y/n) ";
+  cin >> cont;
+  if(cont == 'n'){
+    return EXIT_FAILURE;
+  }
+  
+  int counter2 = 0;
+
+  //set up csv file
+  remove("data.csv");
+  ofstream outputFile;
+  string filename = "data.csv";
+  outputFile.open(filename);
+  outputFile << "time" << "energy" << "length" << endl;
+  outputFile << counter2 << "," << energy << "," << len << endl;
+
+  while(counter2 != timer){
     //choose a an amino acid at random
     int randpos = rand() % pro_len;
     int pro_current[2] = {pro_pos[randpos][0],pro_pos[randpos][1]};
@@ -127,7 +161,10 @@ int main(int argc, char *argv[]){
 	  cout << ")";
 	}
 	cout << "\n";
-	cout << "new energy is: " << totalEnergy(pro_structure,pro_pos,pro_len,energy_mat) << "\n";
+
+	double energy = totalEnergy(pro_structure,pro_pos,pro_len,energy_mat);
+	
+	cout << "new energy is: " << energy << "\n";
 
 	//calculate the 'length' of the protein
 	double len = length(pro_pos,pro_len);
@@ -140,73 +177,10 @@ int main(int argc, char *argv[]){
     else{
       cout << "there are no possible moves\n";
     }
+    counter2 = counter2 + 1;
+    outputFile << counter2 << "," << energy << "," << len << endl;
   }
-
-  //-----------------------------------------------------------------
-  //testing
-  /*
-  for(int i = 0; i < pro_len; i++){
-    cout << pro_structure[i] << ",";    
-  }
-  cout << "\n";
-  
-  cout << "new total energy is: " << totalEnergy(pro_structure,pro_pos,pro_len,energy_mat) << "\n";
-
-  cout << "protein structure is: ";
-  
-  for(int g = 0; g < pro_len; g++){
-    cout << "(";
-    for(int h = 0; h < 2; h++){
-      cout << pro_pos[g][h] << ",";    
-    }
-    cout << ")";
-  }
-  cout << "\n";
-
-  cout << "random position is (" << pro_current[0] << "," << pro_current[1] << ")\n";
-
-  cout << "possible moves are: ";
-  
-  for(int i = 0; i < vec_possmoves.size(); i++){
-    cout << "(";
-    for(int j = 0; j < 2; j++){
-      cout << vec_possmoves[i][j] << ",";
-    }
-    cout << ")";
-  }
-  cout << "\n";
-  
-  if(vec_possmoves.size() != 0){
-    cout << "final moves are: ";
-
-    for(int i = 0; i < vec_finalpossmoves.size(); i++){
-      cout << "(";
-      for(int j = 0; j < 2; j++){
-	cout << vec_finalpossmoves[i][j] << ",";
-      }
-      cout << ")";
-    }
-    cout << "\n";
-  }
-
-  for(int i = 0; i < pro_len; i++){
-    cout << "(";
-    for(int j = 0; j < 2; j++){
-      cout << pro_pos[i][j] << ",";
-    }
-    cout << ")";
-  }
-  cout << "\n";
-
-  for(int i = 0; i < pro_len; i++){
-    cout << "(";
-    for(int j = 0; j < 2; j++){
-      cout << newpro_pos[i][j] << ",";
-    }
-    cout << ")";
-  }
-  cout << "\n";
-
-  cout << "E_move is: " << deltaE << "\n";*/
+  outputFile.close();
+  return 0;
 }
 
