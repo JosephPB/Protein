@@ -1,6 +1,10 @@
 #include"functions.h"
 
 int main(int argc, char *argv[]){
+
+  cout << fixed;
+  cout << setprecision(8);
+  
   int pro_len;
   cout << "Number of amino acids in protein chain: ";
   cin >> pro_len;
@@ -25,11 +29,13 @@ int main(int argc, char *argv[]){
   /* initialise the energy matrix with numbers 0-1 for the attaraction
   energies felt between pairs of each of the 20 amino acid types */
   double energy_mat [20][20];
+  int signs[2] = {-1,1};
   for(int b = 0; b < 20; b++){
     for(int c = 0; c <= b; c++){
-      int rd = (rand() % 100000);
-      energy_mat[b][c] = rd/100000;
-      energy_mat[c][b] = rd/100000;
+      double rd = (double)rand() / (double)((unsigned)RAND_MAX +1);
+      int sign = signs[rand() % 2];
+      energy_mat[b][c] = sign*rd;
+      energy_mat[c][b] = sign*rd;
     }
   }
 
@@ -97,7 +103,7 @@ int main(int argc, char *argv[]){
   if(cont == 'n'){
     return EXIT_FAILURE;
   }
-  
+
   int counter2 = 0;
 
   //set up csv file
@@ -105,12 +111,13 @@ int main(int argc, char *argv[]){
   ofstream outputFile;
   string filename = "data.csv";
   outputFile.open(filename);
-  outputFile << "time" << "energy" << "length" << endl;
+  outputFile << "time" << "," << "energy" << "," << "length" << endl;
   outputFile << counter2 << "," << energy << "," << len << endl;
 
   while(counter2 != timer){
     //choose a an amino acid at random
     int randpos = rand() % pro_len;
+    cout << "randpos is: " << randpos << "\n";
     int pro_current[2] = {pro_pos[randpos][0],pro_pos[randpos][1]};
 
     //find, if any, the possible positions the selected amino acid can move to
@@ -162,12 +169,12 @@ int main(int argc, char *argv[]){
 	}
 	cout << "\n";
 
-	double energy = totalEnergy(pro_structure,pro_pos,pro_len,energy_mat);
+	energy = totalEnergy(pro_structure,pro_pos,pro_len,energy_mat);
 	
 	cout << "new energy is: " << energy << "\n";
 
 	//calculate the 'length' of the protein
-	double len = length(pro_pos,pro_len);
+	len = length(pro_pos,pro_len);
 	cout << "the crow flies length is: " << len << "\n";
       }
       else{

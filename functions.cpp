@@ -14,8 +14,7 @@ int checkList(int vec[][2],int vbl[],int N){
 
 double totalEnergy(int structure[],int occupied[][2],int N,double J[20][20]){
   //calculate the total energy of the stucture
-  vector<vector<int> > vec_neighbours;
-  int energy = 0;
+  double energy = 0;
   for(int w = 0; w < N; w++){
     int x = occupied[w][0];
     int y = occupied[w][1];
@@ -25,7 +24,8 @@ double totalEnergy(int structure[],int occupied[][2],int N,double J[20][20]){
     //check if poss_moves coordinates are occupied
     for(int v = 0; v < 4; v++){
       int check = checkList(occupied,poss_positions[v],N);
-      if(check != -1 && check != w+1 && check != w-1){	
+      if(check != -1 && check != w+1 && check != w-1){
+	cout << "(" << x << "," << y << ") is neighbours with " << "(" << poss_positions[v][0] << "," << poss_positions[v][1] << ") with energy " << J[structure[w]][structure[check]] << "\n";
 	energy = energy + J[structure[w]][structure[check]];
       }
     }
@@ -101,11 +101,10 @@ void doMove(double E_move,int occupied[][2],int position,int target[], int tempe
     occupied[position][1] = target[1];
   }
   else{
-    double boltzmann_constant = 1.38064852*pow(10,-23);
-    double boltzmann = exp(E_move/(boltzmann_constant*temperature));
+    double boltzmann_constant = 1; //1.38064852*pow(10,-23);
+    double boltzmann = exp(-E_move/(boltzmann_constant*temperature));
     cout << "fluctuation enegy is: " << boltzmann << "\n";
-    srand(time(NULL));
-    double random = (rand() % 100000)/100000;
+    double random = (double)rand() / (double)((unsigned)RAND_MAX +1);
     cout << "random barrier is: " <<  random << "\n";
     if(boltzmann > random){
       cout << "energy fluctuations greater than random barrier, moving... \n";
@@ -114,6 +113,8 @@ void doMove(double E_move,int occupied[][2],int position,int target[], int tempe
     }
   }
 }
+
+//should I have srand ^^^ as I've declared it already in my main file? Do I NEED to pass a reference to change occupied?
 
 double length(int occupied[][2], int N){
   //calculate the 'crow flies' distance between protein start and end points
