@@ -11,6 +11,17 @@ int main(int argc, char *argv[]){
   int temp;
   cout << "Temperature: ";
   cin >> temp;
+  char e_type;
+  cout << "Energy matrix ditribution (i/r/j): ";
+  cin >> e_type;
+  double range_start;
+  double range_end;
+  if(e_type == 'i' || e_type == 'r'){
+    cout << "Beginning at range: ";
+    cin >> range_start;
+    cout << "Ending at range: ";
+    cin >> range_end;
+  }
   int timer;
   cout << "Number of Monte Carlo time steps: ";
   cin >> timer;
@@ -25,17 +36,43 @@ int main(int argc, char *argv[]){
     int ri = rand() % 20;
     pro_structure[a] = ri;
   }
-
+  
   /* initialise the energy matrix with numbers 0-1 for the attaraction
   energies felt between pairs of each of the 20 amino acid types */
   double energy_mat [20][20];
-  int signs[2] = {-1,1};
-  for(int b = 0; b < 20; b++){
-    for(int c = 0; c <= b; c++){
-      double rd = (double)rand() / (double)((unsigned)RAND_MAX +1);
-      int sign = signs[rand() % 2];
-      energy_mat[b][c] = sign*rd;
-      energy_mat[c][b] = sign*rd;
+  double number;
+  if(e_type == 'i'){
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    default_random_engine generator (seed);
+    uniform_int_distribution<int> distribution (range_start,range_end);
+    for(int b = 0; b < 20; b++){
+      for(int c = 0; c <= b; c++){
+	number = distribution(generator);
+	energy_mat[b][c] = number;
+	energy_mat[c][b] = number;
+      }
+    }
+  }
+  if(e_type == 'j'){
+    int sign[2] = {-1,1};
+    for(int b = 0; b < 20; b++){
+      for(int c = 0; c <= b; c++){
+        number = sign[rand() % 2];
+	energy_mat[b][c] = number;
+	energy_mat[c][b] = number;
+      }
+    }
+  }
+  if(e_type == 'r'){
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    default_random_engine generator (seed);
+    uniform_real_distribution<double> distribution (range_start,range_end);
+    for(int b = 0; b < 20; b++){
+      for(int c = 0; c <= b; c++){
+	number = distribution(generator);
+	energy_mat[b][c] = number;
+	energy_mat[c][b] = number;
+      }
     }
   }
 
@@ -109,9 +146,9 @@ int main(int argc, char *argv[]){
   //set up csv file
   remove("data.csv");
   ofstream outputFile;
-  string filename = "data.csv";
+  string filename = ("data.csv");
   outputFile.open(filename);
-  outputFile << "time" << "," << "energy" << "," << "length" << endl;
+  outputFile << "time" << "," << "energy" << "," << "length" << "," << temp << "," << pro_len << endl;
   outputFile << counter2 << "," << energy << "," << len << endl;
 
   while(counter2 != timer){
