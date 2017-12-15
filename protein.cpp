@@ -8,11 +8,14 @@ int main(int argc, char *argv[]){
   int pro_len;
   cout << "Number of amino acids in protein chain: ";
   cin >> pro_len;
+  char unfolded;
+  cout << "Initialise an unfolded protein (y/n): ";
+  cin >> unfolded;
   int temp;
   cout << "Temperature: ";
   cin >> temp;
   char e_type;
-  cout << "Energy matrix ditribution (i/r/j): ";
+  cout << "Energy matrix ditribution (integer uniform/random uniform/jumps -1,1): ";
   cin >> e_type;
   double range_start;
   double range_end;
@@ -76,44 +79,52 @@ int main(int argc, char *argv[]){
     }
   }
 
-  //initialise protein positions from a non-crossing random walk
+  //initialise protein positions
   int pro_pos[pro_len][2];
-  int steps[2] = {-1,1};
-  pro_pos[0][0] = 0;
-  pro_pos[0][1] = 0;
-  int d = 1;
-  int counter = 0;
-  while(d != pro_len){
-    int coord = rand() % 2;
-    if(coord == 0){
-      int step = rand() % 2;
-      int to_add[2] = {pro_pos[d-1][0]+steps[step],pro_pos[d-1][1]};
-      if(checkList(pro_pos,to_add,d) == -1){
-	pro_pos[d][0] = to_add[0];
-	pro_pos[d][1] = to_add[1];
-	d = d + 1;
-      }
-      else{
-	counter = counter + 1;
-	if(counter == pro_len * 5){
-	  cout << "time elapsed for random walk\n";
-	  return EXIT_FAILURE;
+  if(unfolded == 'y'){
+    for(int i = 0; i < pro_len; i++){
+      pro_pos[i][0] = i;
+      pro_pos[i][1] = 0;
+    }
+  }
+  else if(unfolded == 'n'){
+    int steps[2] = {-1,1};
+    pro_pos[0][0] = 0;
+    pro_pos[0][1] = 0;
+    int d = 1;
+    int counter = 0;
+    while(d != pro_len){
+      int coord = rand() % 2;
+      if(coord == 0){
+	int step = rand() % 2;
+	int to_add[2] = {pro_pos[d-1][0]+steps[step],pro_pos[d-1][1]};
+	if(checkList(pro_pos,to_add,d) == -1){
+	  pro_pos[d][0] = to_add[0];
+	  pro_pos[d][1] = to_add[1];
+	  d = d + 1;
+	}
+	else{
+	  counter = counter + 1;
+	  if(counter == pro_len * 5){
+	    cout << "time elapsed for random walk\n";
+	    return EXIT_FAILURE;
+	  }
 	}
       }
-    }
-    if(coord == 1){
-      int step = rand() % 2;
-      int to_add[2] = {pro_pos[d-1][0],pro_pos[d-1][1]+steps[step]};
-      if(checkList(pro_pos,to_add,d) == -1){
-	pro_pos[d][0] = to_add[0];
-	pro_pos[d][1] = to_add[1];
-	d = d + 1;
-      }
-      else{
-	counter = counter + 1;
-	if(counter == pro_len * 5){
-	  cout << "time elapsed for random walk\n";
-	  return EXIT_FAILURE;
+      if(coord == 1){
+	int step = rand() % 2;
+	int to_add[2] = {pro_pos[d-1][0],pro_pos[d-1][1]+steps[step]};
+	if(checkList(pro_pos,to_add,d) == -1){
+	  pro_pos[d][0] = to_add[0];
+	  pro_pos[d][1] = to_add[1];
+	  d = d + 1;
+	}
+	else{
+	  counter = counter + 1;
+	  if(counter == pro_len * 5){
+	    cout << "time elapsed for random walk\n";
+	    return EXIT_FAILURE;
+	  }
 	}
       }
     }
@@ -151,7 +162,7 @@ int main(int argc, char *argv[]){
   outputFile << "time" << "," << "energy" << "," << "length" << "," << temp << "," << pro_len << endl;
   outputFile << counter2 << "," << energy << "," << len << endl;
 
-  while(counter2 != timer){
+  while(counter2 != timer-1){
     //choose a an amino acid at random
     int randpos = rand() % pro_len;
     cout << "randpos is: " << randpos << "\n";
@@ -160,6 +171,15 @@ int main(int argc, char *argv[]){
     //find, if any, the possible positions the selected amino acid can move to
     vector<vector<int> > vec_possmoves;
     moveTo(pro_current, pro_pos,pro_len,vec_possmoves);
+    cout << "poss moves are: ";
+    for(int i = 0; i < vec_possmoves.size(); i++){
+      cout << "(";
+      for(int j = 0; j < 2; j++){
+	cout << vec_possmoves[i][j] << ",";
+      }
+      cout << ")";
+    }
+    cout << "\n";
     vector<vector<int> > vec_finalpossmoves;
     if(vec_possmoves.size() != 0){
       canMove(pro_current,randpos,pro_pos,pro_len,vec_possmoves,vec_finalpossmoves);
@@ -222,6 +242,7 @@ int main(int argc, char *argv[]){
       cout << "there are no possible moves\n";
     }
     counter2 = counter2 + 1;
+    
     outputFile << counter2 << "," << energy << "," << len << endl;
   }
   outputFile.close();

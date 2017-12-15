@@ -35,17 +35,22 @@ for i in range(len(length)):
 
 #plot graphs
 
-fig,ax = plt.subplots(2, sharex = True)
-
-ax[0].plot(time,energy, ls = '-', lw = 0.5)
-ax[0].set_ylabel("Energy")
-ax[0].set_title("T = {}, Chain Length = {}".format(temperature,chain))
-
-ax[1].plot(time,length, ls = '-', lw = 0.1)
-ax[1].set_xlabel(r'Monte Carlo time steps')
-ax[1].set_ylabel("Length")
+plt.plot(time,energy, ls = '-', lw = 0.5)
+plt.ylabel("Energy")
+plt.title("T = {}, Chain Length = {}".format(temperature,chain))
 
 plt.show()
+
+plt.plot(time,length, ls = '-', lw = 0.1)
+plt.xlabel(r'Monte Carlo time steps')
+plt.ylabel("Length")
+
+plt.show()
+
+
+
+
+
 #fig.savefig("T{}, L{}.jpg".format(temperature,chain),dpi = 200)
 
 

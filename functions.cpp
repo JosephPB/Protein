@@ -66,7 +66,7 @@ void canMove(int current[],int position, int occupied[][2],int N,vector<vector<i
       }
     }
   }
-  else if(position == N){
+  else if(position == N-1){
     int prevx = occupied[position-1][0];
     int prevy = occupied[position-1][1];
     for(int i = 0; i < vec_poss_moves.size(); i++){
