@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import csv
+import sys
 
 time = []
 energy = []
@@ -8,7 +9,7 @@ temperature = 0
 chain = 0
 
 #open csv file
-with open('data.csv') as csvfile:
+with open(str(sys.argv[1])) as csvfile:
     reader = csv.reader(csvfile)
     row1 = next(reader)
     temperature = row1[3] #temperature is saved in the 4th column in the csv file
@@ -46,10 +47,6 @@ plt.xlabel(r'Monte Carlo time steps')
 plt.ylabel("Length")
 
 plt.show()
-
-
-
-
 
 #fig.savefig("T{}, L{}.jpg".format(temperature,chain),dpi = 200)
 

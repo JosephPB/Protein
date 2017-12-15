@@ -173,9 +173,16 @@ int main(int argc, char *argv[]){
   int counter2 = 0;
 
   //set up csv file
-  remove("data.csv");
+  string spro_len = to_string(pro_len);
+  string stemp = to_string(temp);
+  string filename;
+  if(seeder == 0){
+    filename = ("Tis" + stemp + "Lis" + spro_len +  ".csv");
+  }
+  else{
+    filename = ("seededTis" + stemp + "Lis" + spro_len +  ".csv");
+  }
   ofstream outputFile;
-  string filename = ("data.csv");
   outputFile.open(filename);
   outputFile << "time" << "," << "energy" << "," << "length" << "," << temp << "," << pro_len << endl;
   outputFile << counter2 << "," << energy << "," << len << endl;
