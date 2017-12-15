@@ -15,7 +15,7 @@ int main(int argc, char *argv[]){
   cout << "Temperature: ";
   cin >> temp;
   char e_type;
-  cout << "Energy matrix ditribution (integer uniform/random uniform/jumps -1,1): ";
+  cout << "Energy matrix ditribution (integer uniform/random uniform/jumps -1,1): "; //enter i/r/j
   cin >> e_type;
   double range_start;
   double range_end;
@@ -28,9 +28,15 @@ int main(int argc, char *argv[]){
   int timer;
   cout << "Number of Monte Carlo time steps: ";
   cin >> timer;
+  int seeder;
+  cout << "Seed for process (0/seed): "; //enter 0 for no seed
+  cin >> seeder;
  
   //initialise the random seed to be time
   srand(time(NULL));
+  if(seeder != 0){
+    srand(seeder);
+  }
 
   /* initialise the protein structure with numbers 0-19 for the 20
   unique amino acid types */
@@ -45,7 +51,13 @@ int main(int argc, char *argv[]){
   double energy_mat [20][20];
   double number;
   if(e_type == 'i'){
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    unsigned seed;
+    if(seeder != 0){
+      seed = seeder;
+    }
+    else{
+      seed = std::chrono::system_clock::now().time_since_epoch().count();
+    }
     default_random_engine generator (seed);
     uniform_int_distribution<int> distribution (range_start,range_end);
     for(int b = 0; b < 20; b++){
@@ -67,7 +79,13 @@ int main(int argc, char *argv[]){
     }
   }
   if(e_type == 'r'){
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    unsigned seed;
+    if(seeder != 0){
+      seed = seeder;
+    }
+    else{
+      seed = std::chrono::system_clock::now().time_since_epoch().count();
+    }
     default_random_engine generator (seed);
     uniform_real_distribution<double> distribution (range_start,range_end);
     for(int b = 0; b < 20; b++){
@@ -162,6 +180,7 @@ int main(int argc, char *argv[]){
   outputFile << "time" << "," << "energy" << "," << "length" << "," << temp << "," << pro_len << endl;
   outputFile << counter2 << "," << energy << "," << len << endl;
 
+  srand(time(NULL));
   while(counter2 != timer-1){
     //choose a an amino acid at random
     int randpos = rand() % pro_len;
