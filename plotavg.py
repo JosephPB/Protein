@@ -40,7 +40,7 @@ for i in range(len(sys.argv)-1):
         length[i] = float(length[i])
 
     #plot graphs
-
+    """
     plt.plot(time,energy,ls = '-',lw = 0.5)
     plt.xlabel("Monte Carlo time steps")
     plt.ylabel("Energy")
@@ -54,6 +54,7 @@ for i in range(len(sys.argv)-1):
     plt.title("T = {}, Chain Length = {}".format(temperature,chain))
 
     plt.savefig("Length:Tis{}Lis{}.jpg".format(temperature,chain),dpi = 200)
+    """
     
     avgE = 0
     for i in energy:
@@ -69,10 +70,14 @@ for i in range(len(sys.argv)-1):
     arr_energy.append(avgE)
     arr_length.append(avgL)
 
-plt.plot(arr_temp,arr_energy,ls = '-',lw = 0.5)
+plt.plot(arr_temp,arr_energy,ls = '.',lw = 0.5)
 plt.xlabel("Temperature")
 plt.ylabel("Energy")
 plt.title("Energy vs. Temperature")
+
+print arr_temp
+print arr_energy
+print arr_length
 
 plt.savefig("Averaged Energy.jpg", dpi = 200)
 
