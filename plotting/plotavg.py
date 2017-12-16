@@ -66,7 +66,7 @@ for i in range(len(sys.argv)-1):
         avgL += i
     avgL = avgL / len(length)
 
-    arr_temp.append(temperature)
+    arr_temp.append(int(temperature))
     arr_energy.append(avgE)
     arr_length.append(avgL)
 
