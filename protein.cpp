@@ -177,10 +177,10 @@ int main(int argc, char *argv[]){
   string stemp = to_string(temp);
   string filename;
   if(seeder == 0){
-    filename = ("Tis" + stemp + "Lis" + spro_len +  ".csv");
+    filename = ("/Users/JosephBullock/Google Drive/PhD/c++Project/plotting/seededTis" + stemp + "Lis" + spro_len +  ".csv");
   }
   else{
-    filename = ("seededTis" + stemp + "Lis" + spro_len +  ".csv");
+    filename = ("/Users/JosephBullock/Google Drive/PhD/c++Project/plotting/seededTis" + stemp + "Lis" + spro_len +  ".csv");
   }
   ofstream outputFile;
   outputFile.open(filename);

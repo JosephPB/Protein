@@ -1,3 +1,6 @@
+"""Plots temperature against average energy/average length
+example input: pythonw plotavg.py seededTis1Lis30.csv seededTis2Lis30.csv seededTis3Lis30.csv seededTis4Lis30.csv seededTis5Lis30.csv seededTis6Lis30.csv seededTis7Lis30.csv seededTis8Lis30.csv seededTis9Lis30.csv seededTis10Lis30.csv seededTis11Lis30.csv seededTis12Lis30.csv seededTis13Lis30.csv seededTis14Lis30.csv seededTis15Lis30.csv seededTis16Lis30.csv seededTis17Lis30.csv seededTis18Lis30.csv seededTis19Lis30.csv seededTis20Lis30.csv"""
+
 import matplotlib.pyplot as plt
 import csv
 import sys
@@ -39,23 +42,8 @@ for i in range(len(sys.argv)-1):
     for i in range(len(length)):
         length[i] = float(length[i])
 
-    #plot graphs
-    """
-    plt.plot(time,energy,ls = '-',lw = 0.5)
-    plt.xlabel("Monte Carlo time steps")
-    plt.ylabel("Energy")
-    plt.title("T = {}, Chain Length = {}".format(temperature,chain))
     
-    plt.savefig("Energy:Tis{}Lis{}.jpg".format(temperature,chain),dpi = 200)
-    
-    plt.plot(time,length,ls = '-',lw = 0.1)
-    plt.xlabel(r'Monte Carlo time steps')
-    plt.ylabel("Length")
-    plt.title("T = {}, Chain Length = {}".format(temperature,chain))
-
-    plt.savefig("Length:Tis{}Lis{}.jpg".format(temperature,chain),dpi = 200)
-    """
-    
+    #average energies and lengths
     avgE = 0
     for i in energy:
         avgE += i
@@ -70,21 +58,20 @@ for i in range(len(sys.argv)-1):
     arr_energy.append(avgE)
     arr_length.append(avgL)
 
-plt.plot(arr_temp,arr_energy,ls = '.',lw = 0.5)
+#plot graphs    
+
+f = plt.figure(1)
+plt.plot(arr_temp,arr_energy,'ro',lw = 0.5)
 plt.xlabel("Temperature")
 plt.ylabel("Energy")
 plt.title("Energy vs. Temperature")
 
-print arr_temp
-print arr_energy
-print arr_length
+f.savefig("Averaged Energy.jpg", dpi = 200)
 
-plt.savefig("Averaged Energy.jpg", dpi = 200)
-
-plt.plot(arr_temp,arr_length,ls = '-',lw = 0.5)
+g = plt.figure(2)
+plt.plot(arr_temp,arr_length,'ro',lw = 0.5)
 plt.xlabel("Temperature")
 plt.ylabel("Length")
 plt.title("Length vs. Temperature")
 
-plt.savefig("Averaged Length.jpg", dpi = 200)
-
+g.savefig("Averaged Length.jpg", dpi = 200)
