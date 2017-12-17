@@ -1,10 +1,10 @@
 #include"functions.h"
 
-int checkList(int vec[][2],int vbl[],int N){
+int checkList(occupied vec[],int vbl[],int N){
   //check is variable is in array
   int is_in = -1;
   for(int z = 0; z < N; z++){
-    if(vec[z][0] == vbl[0] && vec[z][1] == vbl[1]){
+    if(vec[z].x == vbl[0] && vec[z].y == vbl[1]){
       is_in = z;
       break;
     }
@@ -12,12 +12,12 @@ int checkList(int vec[][2],int vbl[],int N){
   return is_in;
 }
 
-double totalEnergy(int structure[],int occupied[][2],int N,double J[20][20]){
+double totalEnergy(int structure[],occupied occupied[],int N,double J[20][20]){
   //calculate the total energy of the stucture
   double energy = 0;
   for(int w = 0; w < N; w++){
-    int x = occupied[w][0];
-    int y = occupied[w][1];
+    int x = occupied[w].x;
+    int y = occupied[w].y;
 
     int poss_positions[4][2] = {{x+1,y},{x-1,y},{x,y+1},{x,y-1}};
     
@@ -34,7 +34,7 @@ double totalEnergy(int structure[],int occupied[][2],int N,double J[20][20]){
   return energy;
 }
 
-void moveTo(int current[],int occupied[][2],int N, vector<vector<int> >& vec_poss_moves){
+void moveTo(int current[],occupied occupied[],int N, vector<vector<int> >& vec_poss_moves){
   //find, if any, a position current amino acid can move to
   int x = current[0];
   int y = current[1];
@@ -52,12 +52,12 @@ void moveTo(int current[],int occupied[][2],int N, vector<vector<int> >& vec_pos
   }
 }
  
-void canMove(int current[],int position, int occupied[][2],int N,vector<vector<int> > vec_poss_moves,vector<vector<int> >& vec_final_poss_moves){
+void canMove(int current[],int position, occupied occupied[],int N,vector<vector<int> > vec_poss_moves,vector<vector<int> >& vec_final_poss_moves){
   //check to see if selected amino acid can move to a neighbouring point
   //accounting for end amino acid cases
   if(position == 0){
-    int nextx = occupied[position+1][0];
-    int nexty = occupied[position+1][1];
+    int nextx = occupied[position+1].x;
+    int nexty = occupied[position+1].y;
     for(int i = 0; i < vec_poss_moves.size(); i++){
       int x = vec_poss_moves[i][0];
       int y = vec_poss_moves[i][1];
@@ -67,8 +67,8 @@ void canMove(int current[],int position, int occupied[][2],int N,vector<vector<i
     }
   }
   else if(position == N-1){
-    int prevx = occupied[position-1][0];
-    int prevy = occupied[position-1][1];
+    int prevx = occupied[position-1].x;
+    int prevy = occupied[position-1].y;
     for(int i = 0; i < vec_poss_moves.size(); i++){
       int x = vec_poss_moves[i][0];
       int y = vec_poss_moves[i][1];
@@ -78,10 +78,10 @@ void canMove(int current[],int position, int occupied[][2],int N,vector<vector<i
     }
   }
   else{
-    int prevx = occupied[position-1][0];
-    int prevy = occupied[position-1][1];
-    int nextx = occupied[position+1][0];
-    int nexty = occupied[position+1][1];
+    int prevx = occupied[position-1].x;
+    int prevy = occupied[position-1].y;
+    int nextx = occupied[position+1].x;
+    int nexty = occupied[position+1].y;
     for(int i = 0; i < vec_poss_moves.size(); i++){
       int x = vec_poss_moves[i][0];
       int y = vec_poss_moves[i][1];
@@ -93,7 +93,7 @@ void canMove(int current[],int position, int occupied[][2],int N,vector<vector<i
   }
 }
 
-void doMove(double E_move,int occupied[][2],int position,int previos_pos[], int temperature){
+void doMove(double E_move,occupied occupied[],int position,int previous_pos[], int temperature){
   //move the selected amino acid to the target position if it satisfies the conditions
   if(E_move < 0){
     cout << "moving will lower energy, moving... \n";
@@ -116,8 +116,8 @@ void doMove(double E_move,int occupied[][2],int position,int previos_pos[], int 
 
 //should I have srand ^^^ as I've declared it already in my main file? Do I NEED to pass a reference to change occupied?
 
-double length(int occupied[][2], int N){
+double length(occupied occupied[], int N){
   //calculate the 'crow flies' distance between protein start and end points
 
-  return pow(pow((occupied[0][0]-occupied[N-1][0]),2.0)+pow((occupied[0][1]-occupied[N-1][1]),2.0),0.5);  
+  return pow(pow((occupied[0].x-occupied[N-1].x),2.0)+pow((occupied[0].y-occupied[N-1].y),2.0),0.5);  
   }

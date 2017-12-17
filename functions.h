@@ -19,17 +19,22 @@
 
 using namespace std;
 
-int checkList(int vec[][2],int vbl[],int N);
+struct occupied {
+  int x;
+  int y;
+};
 
-double totalEnergy(int structure[],int occupied[][2],int N,double J[20][20]);
+int checkList(occupied vec[],int vbl[],int N);
 
-void moveTo(int current[],int occupied[][2],int N,vector<vector<int> >& vec_poss_moves);
+double totalEnergy(int structure[],occupied occupied[],int N,double J[20][20]);
 
-void canMove(int current[],int position, int occupied[][2],int N,vector<vector<int> > vec_poss_moves,vector<vector<int> >& vec_final_poss_moves);
+void moveTo(int current[],occupied occupied[],int N,vector<vector<int> >& vec_poss_moves);
 
-void doMove(double E_move,int occupied[][2],int position,int target[], int temperature);
+void canMove(int current[],int position,occupied occupied[],int N,vector<vector<int> > vec_poss_moves,vector<vector<int> >& vec_final_poss_moves);
 
-double length(int occupied[][2], int N);
+void doMove(double E_move,occupied occupied[],int position,int target[], int temperature);
+
+double length(occupied occupied[], int N);
 
 #endif
 

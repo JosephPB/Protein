@@ -1,11 +1,5 @@
 #include"functions.h"
 
-//declaring sturctures (should this be done in the header file or a separate cpp file?)
-struct occupied {
-  int x;
-  int y;
-}
-
 int main(int argc, char *argv[]){
   
   cout << fixed;
@@ -104,7 +98,7 @@ int main(int argc, char *argv[]){
   }
 
   //initialise protein positions
-  struct pro_pos[pro_len];
+  struct occupied pro_pos[pro_len];
   if(unfolded == 'y'){
     for(int i = 0; i < pro_len; i++){
       pro_pos[i].x = i;
@@ -137,7 +131,7 @@ int main(int argc, char *argv[]){
       }
       if(coord == 1){
 	int step = rand() % 2;
-	int to_add[2] = {pro_pos[d-1][0],pro_pos[d-1][1]+steps[step]};
+	int to_add[2] = {pro_pos[d-1].x,pro_pos[d-1].y+steps[step]};
 	if(checkList(pro_pos,to_add,d) == -1){
 	  pro_pos[d].x = to_add[0];
 	  pro_pos[d].y = to_add[1];
