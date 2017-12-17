@@ -93,12 +93,10 @@ void canMove(int current[],int position, int occupied[][2],int N,vector<vector<i
   }
 }
 
-void doMove(double E_move,int occupied[][2],int position,int target[], int temperature){
+void doMove(double E_move,int occupied[][2],int position,int previos_pos[], int temperature){
   //move the selected amino acid to the target position if it satisfies the conditions
   if(E_move < 0){
     cout << "moving will lower energy, moving... \n";
-    occupied[position][0] = target[0];
-    occupied[position][1] = target[1];
   }
   else{
     double boltzmann_constant = 1; //1.38064852*pow(10,-23);
@@ -108,8 +106,10 @@ void doMove(double E_move,int occupied[][2],int position,int target[], int tempe
     cout << "random barrier is: " <<  random << "\n";
     if(boltzmann > random){
       cout << "energy fluctuations greater than random barrier, moving... \n";
-      occupied[position][0] = target[0];
-      occupied[position][1] = target[1];
+    }
+    else{
+      occupied[position].x = previous_pos[0];
+      occupied[position].y = previous_pos[1];
     }
   }
 }

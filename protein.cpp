@@ -1,7 +1,13 @@
 #include"functions.h"
 
-int main(int argc, char *argv[]){
+//declaring sturctures (should this be done in the header file or a separate cpp file?)
+struct occupied {
+  int x;
+  int y;
+}
 
+int main(int argc, char *argv[]){
+  
   cout << fixed;
   cout << setprecision(8);
   
@@ -98,27 +104,27 @@ int main(int argc, char *argv[]){
   }
 
   //initialise protein positions
-  int pro_pos[pro_len][2];
+  struct pro_pos[pro_len];
   if(unfolded == 'y'){
     for(int i = 0; i < pro_len; i++){
-      pro_pos[i][0] = i;
-      pro_pos[i][1] = 0;
+      pro_pos[i].x = i;
+      pro_pos[i].y = 0;
     }
   }
   else if(unfolded == 'n'){
     int steps[2] = {-1,1};
-    pro_pos[0][0] = 0;
-    pro_pos[0][1] = 0;
+    pro_pos[0].x = 0;
+    pro_pos[0].y = 0;
     int d = 1;
     int counter = 0;
     while(d != pro_len){
       int coord = rand() % 2;
       if(coord == 0){
 	int step = rand() % 2;
-	int to_add[2] = {pro_pos[d-1][0]+steps[step],pro_pos[d-1][1]};
+	int to_add[2] = {pro_pos[d-1].x+steps[step],pro_pos[d-1].y};
 	if(checkList(pro_pos,to_add,d) == -1){
-	  pro_pos[d][0] = to_add[0];
-	  pro_pos[d][1] = to_add[1];
+	  pro_pos[d].x = to_add[0];
+	  pro_pos[d].y = to_add[1];
 	  d = d + 1;
 	}
 	else{
@@ -133,8 +139,8 @@ int main(int argc, char *argv[]){
 	int step = rand() % 2;
 	int to_add[2] = {pro_pos[d-1][0],pro_pos[d-1][1]+steps[step]};
 	if(checkList(pro_pos,to_add,d) == -1){
-	  pro_pos[d][0] = to_add[0];
-	  pro_pos[d][1] = to_add[1];
+	  pro_pos[d].x = to_add[0];
+	  pro_pos[d].y = to_add[1];
 	  d = d + 1;
 	}
 	else{
@@ -150,10 +156,7 @@ int main(int argc, char *argv[]){
 
   for(int i = 0; i < pro_len; i++){
     cout << "(";
-    for(int j = 0; j < 2; j++){
-      cout << pro_pos[i][j] << ",";
-    }
-    cout << ")";
+    cout << pro_pos[i].x << "," << pro_pos[i].y << ")";
   }
   cout << "\n";
 
@@ -192,7 +195,7 @@ int main(int argc, char *argv[]){
     //choose a an amino acid at random
     int randpos = rand() % pro_len;
     cout << "randpos is: " << randpos << "\n";
-    int pro_current[2] = {pro_pos[randpos][0],pro_pos[randpos][1]};
+    int pro_current[2] = {pro_pos[randpos].x,pro_pos[randpos].y};
 
     //find, if any, the possible positions the selected amino acid can move to
     vector<vector<int> > vec_possmoves;
@@ -227,14 +230,14 @@ int main(int argc, char *argv[]){
 	to_move[0] = vec_finalpossmoves[randpos2][0];
 	to_move[1] = vec_finalpossmoves[randpos2][1];
 
-	cout << "want to move (" << pro_pos[randpos][0] << "," << pro_pos[randpos][1] << ") to (" << to_move[0] << "," << to_move[1] << ")\n";
+	cout << "want to move (" << pro_pos[randpos].x << "," << pro_pos[randpos].y << ") to (" << to_move[0] << "," << to_move[1] << ")\n";
     
 	//calculate energy difference
-	int newpro_pos[pro_len][2];
-	copy(&pro_pos[0][0], &pro_pos[0][0]+pro_len*2, &newpro_pos[0][0]);
-	newpro_pos[randpos][0] = to_move[0];
-	newpro_pos[randpos][1] = to_move[1];
-	double deltaE = totalEnergy(pro_structure,newpro_pos,pro_len,energy_mat) - totalEnergy(pro_structure,pro_pos,pro_len,energy_mat);
+	double init_energy = totalEnergy(pro_structure,pro_pos,pro_len,energy_mat);
+	int pre_change[2] = {pro_pos[randpos].x,pro_pos[randpos].y};
+	pro_pos[randpos].x = to_move[0];
+	pro_pos[randpos].y = to_move[1];
+	double deltaE = totalEnergy(pro_structure,pro_pos,pro_len,energy_mat) - init_energy; 
 
 	cout << "energy difference is: " << deltaE << "\n";
     
@@ -244,11 +247,7 @@ int main(int argc, char *argv[]){
 
 	cout << "moved\n";
 	for(int i = 0; i < pro_len; i++){
-	  cout << "(";
-	  for(int j = 0; j < 2; j++){
-	    cout << pro_pos[i][j] << ",";
-	  }
-	  cout << ")";
+	  cout << "(" << pro_pos[i].x << "," << pro_pos[i].y << ")";
 	}
 	cout << "\n";
 
