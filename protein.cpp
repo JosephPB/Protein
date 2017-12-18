@@ -177,7 +177,7 @@ int main(int argc, char *argv[]){
     filename = ("./plotting/seededTis" + stemp + "Lis" + spro_len +  ".csv");
   }
   else{
-    filename = ("./plotting/seededTis" + stemp + "Lis" + spro_len +  ".csv");
+    filename = ("./plotting/Tis" + stemp + "Lis" + spro_len +  ".csv");
   }
   ofstream outputFile;
   outputFile.open(filename);

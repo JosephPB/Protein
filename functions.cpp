@@ -1,7 +1,7 @@
 #include"functions.h"
 
-int checkList(occupied vec[],int vbl[],int N){
-  //check is variable is in array
+int checkList(const struct occupied * vec,int vbl[],int N){
+  //check is avariable is in array
   int is_in = -1;
   for(int z = 0; z < N; z++){
     if(vec[z].x == vbl[0] && vec[z].y == vbl[1]){

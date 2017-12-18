@@ -24,7 +24,7 @@ struct occupied {
   int y;
 };
 
-int checkList(occupied vec[],int vbl[],int N);
+int checkList(const struct occupied * vec,int vbl[],int N);
 
 double totalEnergy(int structure[],occupied occupied[],int N,double J[20][20]);
 
