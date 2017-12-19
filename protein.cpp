@@ -31,12 +31,6 @@ int main(int argc, char *argv[]){
   int seeder;
   cout << "Seed for process (0/seed): "; //enter 0 for no seed
   cin >> seeder;
- 
-  //initialise the random seed to be time
-  srand(time(NULL));
-  if(seeder != 0){
-    srand(seeder);
-  }
 
   /* initialise the protein structure with numbers 0-19 for the 20
   unique amino acid types */
@@ -97,6 +91,12 @@ int main(int argc, char *argv[]){
     }
   }
 
+  //initialise the random seed to be time
+  srand(time(NULL));
+  if(seeder != 0){
+    srand(seeder);
+  }
+  
   //initialise protein positions
   struct occupied pro_pos[pro_len];
   if(unfolded == 'y'){
@@ -228,7 +228,6 @@ int main(int argc, char *argv[]){
     
 	//calculate energy difference
 	double init_energy = totalEnergy(pro_structure,pro_pos,pro_len,energy_mat);
-	int pre_change[2] = {pro_pos[randpos].x,pro_pos[randpos].y};
 	pro_pos[randpos].x = to_move[0];
 	pro_pos[randpos].y = to_move[1];
 	double deltaE = totalEnergy(pro_structure,pro_pos,pro_len,energy_mat) - init_energy; 
@@ -237,7 +236,7 @@ int main(int argc, char *argv[]){
     
 	/* move amino acid if the move lowers the energy or is less that the thermal
 	   fluctuations */
-	doMove(deltaE,pro_pos,randpos,to_move,temp);
+	doMove(deltaE,pro_pos,randpos,pro_current,temp);
 
 	cout << "moved\n";
 	for(int i = 0; i < pro_len; i++){
