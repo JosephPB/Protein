@@ -157,6 +157,7 @@ void moveTo(int current[],const struct occupied * occupied,int N, vector<vector<
       vector<int> to_add;
       to_add.push_back(poss_moves[v].x);
       to_add.push_back(poss_moves[v].y);
+      to_add.push_back(poss_moves[v].z);
       vec_poss_moves.push_back(to_add);
     }
   }
