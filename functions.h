@@ -27,15 +27,17 @@ struct occupied {
 
 int checkList(const struct occupied * vec,int vbl[],int N);
 
-double totalEnergy(int structure[],struct occupied * occupied,int N,double J[20][20]);
+int checkStruct(const struct occupied * vec, const struct occupied vbl, int N);
 
-void moveTo(int current[],struct occupied * occupied,int N,vector<vector<int> >& vec_poss_moves);
+double totalEnergy(int structure[],const struct occupied * occupied,int N,double J[20][20]);
 
-void canMove(int current[],int position,struct occupied * occupied,int N,vector<vector<int> > vec_poss_moves,vector<vector<int> >& vec_final_poss_moves);
+void moveTo(int current[],const struct occupied * occupied,int N,vector<vector<int> >& vec_poss_moves);
+
+void canMove(int current[],int position,const struct occupied * occupied,int N,vector<vector<int> > vec_poss_moves,vector<vector<int> >& vec_final_poss_moves);
 
 void doMove(double E_move,struct occupied * occupied,int position,int target[], int temperature);
 
-double length(struct occupied * occupied,int N);
+double length(const struct occupied * occupied,int N);
 
 #endif
 

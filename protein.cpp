@@ -114,7 +114,7 @@ int main(int argc, char *argv[]){
     int d = 1;
     int counter = 0;
     while(d != pro_len){
-      int coord = rand() % 2;
+      int coord = rand() % 3;
       if(coord == 0){
 	int step = rand() % 2;
 	int to_add[3] = {pro_pos[d-1].x+steps[step],pro_pos[d-1].y,pro_pos[d-1].z};
@@ -263,7 +263,7 @@ int main(int argc, char *argv[]){
 
 	cout << "moved\n";
 	for(int i = 0; i < pro_len; i++){
-	  cout << "(" << pro_pos[i].x << "," << pro_pos[i].y << ")";
+	  cout << "(" << pro_pos[i].x << "," << pro_pos[i].y << "," << pro_pos[i].z << ")";
 	}
 	cout << "\n";
 
