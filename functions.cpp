@@ -1,7 +1,7 @@
 #include"functions.h"
 
 int checkList(const struct occupied * vec,int vbl[],int N){
-  //check is avariable is in array
+  //check is an array is in a 3D array of arrays
   int is_in = -1;
   for(int i = 0; i < N; i++){
     if(vec[i].x == vbl[0] && vec[i].y == vbl[1] && vec[i].z == vbl[2]){
@@ -12,22 +12,58 @@ int checkList(const struct occupied * vec,int vbl[],int N){
   return is_in;
 }
 
+void checkStruct(const struct occupied * vec, const struct occupied *  vbl, int size1, int size2,int array[]){
+  //check a struct is in an array of structs and updates an array with their positions
+  for(int j = 0; j < size2; j++){
+    int i = 0;
+    bool is_in = false;
+    while(i != size1 && is_in != true){
+      if(vec[i].x == vbl[j].x && vec[i].y == vbl[j].y && vec[i].z == vbl[j].z){
+	array[i] = i;
+	is_in = true;
+      }
+      i = i + 1;
+    }
+  }
+}
+
 double totalEnergy(int structure[],struct occupied * occupied,int N,double J[20][20]){
   //calculate the total energy of the stucture
   double energy = 0;
   for(int w = 0; w < N; w++){
     int x = occupied[w].x;
     int y = occupied[w].y;
+    int z = occupied[w].z;
 
-    int poss_positions[4][2] = {{x+1,y},{x-1,y},{x,y+1},{x,y-1}};
-    
+    struct occupied poss_positions[8];
+    poss_positions[0].x = x+1;
+    poss_positions[0].y = y;
+    poss_positions[0].z = z;
+    poss_positions[1].x = x-1;
+    poss_positions[1].y = y;
+    poss_positions[1].z = z;
+    poss_positions[2].x = x;
+    poss_positions[2].y = y+1;
+    poss_positions[2].z = z;
+    poss_positions[3].x = x;
+    poss_positions[3].y = y-1;
+    poss_positions[3].z = z;
+    poss_positions[4].x = x;
+    poss_positions[4].y = y;
+    poss_positions[4].z = z+1;
+    poss_positions[5].x = x;
+    poss_positions[5].y = y;
+    poss_positions[5].z = z-1;
+
     //check if poss_moves coordinates are occupied
-    for(int v = 0; v < 4; v++){
-      int check = checkList(occupied,poss_positions[v],N);
-      if(check != -1 && check != w+1 && check != w-1){
-	cout << "(" << x << "," << y << ") is neighbours with " << "(" << poss_positions[v][0] << "," << poss_positions[v][1] << ") with energy " << J[structure[w]][structure[check]] << "\n";
-	energy = energy + J[structure[w]][structure[check]];
-      }
+    int pos_in[8];
+    fill_n(pos_in,8,-1);
+    checkStruct(occupied,poss_positions,N,8,pos_in);
+    for(int i = 0; i < 8; i++){
+      if(pos_in[i] != -1 && pos_in[1] != w-1 && pos_in[i] != w+1){
+	cout << "(" << x << "," << y << "," << z << ") is neighbours with " << "(" << poss_positions[i].x << "," << poss_positions[i].y << "," << poss_positions[i].z << ") with energy " << J[structure[w]][structure[pos_in[i]]] << "\n";
+	energy = energy + J[structure[w]][structure[pos_in[i]]];
+      } 
     }
   }
   energy = energy/2;
@@ -38,6 +74,7 @@ void moveTo(int current[],struct occupied * occupied,int N, vector<vector<int> >
   //find, if any, a position current amino acid can move to
   int x = current[0];
   int y = current[1];
+  int z = current[2];
 
   int poss_moves[8][2] = {{x+1,y},{x-1,y},{x,y+1},{x,y-1},{x+1,y+1},{x-1,y+1},{x+1,y-1},{x-1,y-1}};
 

@@ -121,7 +121,7 @@ int main(int argc, char *argv[]){
 	if(checkList(pro_pos,to_add,d) == -1){
 	  pro_pos[d].x = to_add[0];
 	  pro_pos[d].y = to_add[1];
-	  pro_pos[d].z = to_add[2]
+	  pro_pos[d].z = to_add[2];
 	  d = d + 1;
 	}
 	else{
@@ -246,7 +246,7 @@ int main(int argc, char *argv[]){
 	to_move[1] = vec_finalpossmoves[randpos2][1];
 	to_move[2] = vec_finalpossmoves[randpos2][2];
 
-	cout << "want to move (" << pro_pos[randpos].x << "," << pro_pos[randpos].y << "," <<pro_pos[randpos].z ") to (" << to_move[0] << "," << to_move[1] << "," << to_move[2] << ")\n";
+	cout << "want to move (" << pro_pos[randpos].x << "," << pro_pos[randpos].y << "," <<pro_pos[randpos].z << ") to (" << to_move[0] << "," << to_move[1] << "," << to_move[2] << ")\n";
     
 	//calculate energy difference
 	double init_energy = totalEnergy(pro_structure,pro_pos,pro_len,energy_mat);
