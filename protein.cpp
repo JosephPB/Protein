@@ -31,12 +31,6 @@ int main(int argc, char *argv[]){
   int seeder;
   cout << "Seed for process (0/seed): "; //enter 0 for no seed
   cin >> seeder;
- 
-  //initialise the random seed to be time
-  srand(time(NULL));
-  if(seeder != 0){
-    srand(seeder);
-  }
 
   /* initialise the protein structure with numbers 0-19 for the 20
   unique amino acid types */
@@ -97,6 +91,12 @@ int main(int argc, char *argv[]){
     }
   }
 
+  //initialise the random seed to be time
+  srand(time(NULL));
+  if(seeder != 0){
+    srand(seeder);
+  }
+  
   //initialise protein positions
   struct occupied pro_pos[pro_len];
   if(unfolded == 'y'){
