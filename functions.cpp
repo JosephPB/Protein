@@ -3,9 +3,9 @@
 int checkList(const struct occupied * vec,int vbl[],int N){
   //check is avariable is in array
   int is_in = -1;
-  for(int z = 0; z < N; z++){
-    if(vec[z].x == vbl[0] && vec[z].y == vbl[1]){
-      is_in = z;
+  for(int i = 0; i < N; i++){
+    if(vec[i].x == vbl[0] && vec[i].y == vbl[1] && vec[i].z == vbl[2]){
+      is_in = i;
       break;
     }
   }

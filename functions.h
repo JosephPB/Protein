@@ -22,6 +22,7 @@ using namespace std;
 struct occupied {
   int x;
   int y;
+  int z;
 };
 
 int checkList(const struct occupied * vec,int vbl[],int N);
