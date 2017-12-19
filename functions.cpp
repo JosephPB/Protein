@@ -12,19 +12,16 @@ int checkList(const struct occupied * vec,int vbl[],int N){
   return is_in;
 }
 
-void checkStruct(const struct occupied * vec, const struct occupied *  vbl, int size1, int size2,int array[]){
+int checkStruct(const struct occupied * vec, const struct occupied vbl, int N){
   //check a struct is in an array of structs and updates an array with their positions
-  for(int j = 0; j < size2; j++){
-    int i = 0;
-    bool is_in = false;
-    while(i != size1 && is_in != true){
-      if(vec[i].x == vbl[j].x && vec[i].y == vbl[j].y && vec[i].z == vbl[j].z){
-	array[i] = i;
-	is_in = true;
-      }
-      i = i + 1;
+  int is_in = -1;
+  for(int i = 0; i < N; i++){
+    if(vec[i].x == vbl.x && vec[i].y == vbl.y && vec[i].z == vbl.z){
+      is_in = i;
+      break;
     }
   }
+  return is_in;
 }
 
 double totalEnergy(int structure[],struct occupied * occupied,int N,double J[20][20]){
@@ -56,13 +53,11 @@ double totalEnergy(int structure[],struct occupied * occupied,int N,double J[20]
     poss_positions[5].z = z-1;
 
     //check if poss_moves coordinates are occupied
-    int pos_in[8];
-    fill_n(pos_in,8,-1);
-    checkStruct(occupied,poss_positions,N,8,pos_in);
     for(int i = 0; i < 8; i++){
-      if(pos_in[i] != -1 && pos_in[1] != w-1 && pos_in[i] != w+1){
-	cout << "(" << x << "," << y << "," << z << ") is neighbours with " << "(" << poss_positions[i].x << "," << poss_positions[i].y << "," << poss_positions[i].z << ") with energy " << J[structure[w]][structure[pos_in[i]]] << "\n";
-	energy = energy + J[structure[w]][structure[pos_in[i]]];
+      int check = checkStruct(occupied,poss_positions[i],N);
+      if(check != -1 && check != w-1 && check != w+1){
+	cout << "(" << x << "," << y << "," << z << ") is neighbours with " << "(" << poss_positions[i].x << "," << poss_positions[i].y << "," << poss_positions[i].z << ") with energy " << J[structure[w]][structure[check]] << "\n";
+	energy = energy + J[structure[w]][structure[check]];
       } 
     }
   }
@@ -235,4 +230,4 @@ double length(struct occupied * occupied, int N){
   //calculate the 'crow flies' distance between protein start and end points
 
   return pow(pow((occupied[0].x-occupied[N-1].x),2.0)+pow((occupied[0].y-occupied[N-1].y),2.0),0.5);  
-  }
+}
