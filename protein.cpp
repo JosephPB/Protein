@@ -6,10 +6,10 @@ int main(int argc, char *argv[]){
   cout << setprecision(8);
   
   int pro_len;
-  cout << "Number of amino acids in protein chain:";
+  cout << "Number of amino acids in protein chain :";
   cin >> pro_len;
   char unfolded;
-  cout << "Initialise an unfolded protein (y/n):";
+  cout << "Initialise an unfolded protein (y/n) :";
   cin >> unfolded;
   int temp;
   cout << "Temperature: ";
