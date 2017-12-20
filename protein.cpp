@@ -195,10 +195,10 @@ int main(int argc, char *argv[]){
   string stemp = to_string(temp);
   string filename;
   if(seeder != 0){
-    filename = ("./plotting/seededTis" + stemp + "Lis" + spro_len +  ".csv");
+    filename = ("~/mt/batch/jbullock/plotting/seededTis" + stemp + "Lis" + spro_len +  ".csv");
   }
   else{
-    filename = ("./plotting/Tis" + stemp + "Lis" + spro_len +  ".csv");
+    filename = ("~/mt/batch/jbullock/plotting/Tis" + stemp + "Lis" + spro_len +  ".csv");
   }
   ofstream outputFile;
   outputFile.open(filename);
