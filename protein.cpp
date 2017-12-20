@@ -194,7 +194,7 @@ int main(int argc, char *argv[]){
   string spro_len = to_string(pro_len);
   string stemp = to_string(temp);
   string filename;
-  if(seeder == 0){
+  if(seeder != 0){
     filename = ("./plotting/seededTis" + stemp + "Lis" + spro_len +  ".csv");
   }
   else{
