@@ -7,9 +7,7 @@ This model simulates the folding of a randomly generated protein, given certain 
 ## Getting Started
 
 Clone the repository:
-```
-  git clone https://github.com/JosephPB/Protein
-```
+```git clone https://github.com/JosephPB/Protein```
 
 The files are divided into directories depending on your requirements. The ```2D``` directory contains a verion of the programme which runs on an infinite 2D lattice, and equivalently for the ```3D``` directory. If you have access to a bbatch system the ```batch``` directory is set up to run such a programme with modifications. On a batch system change the ```batch.sh``` shell file and the destination of the write file ```/mt/batch/...``` to your appropriate values.
 
@@ -40,9 +38,7 @@ Preset input files, to avoid manual input of the above parameters, can be stored
 ### Plotting
 
 The ```plotting``` directory contains plotting code. ```plotsingle.py``` takes input from one ```.csv``` file at the command line:
-```
-  plotsingle.py <filename.csv>
-```
+```plotsingle.py <filename.csv>```
 and plots energy vs. Monte Carlo time and lenth vs. Monte Carlo time.
 
 Similarly ```plotavg.py``` takes multiple file inputs, of the same monomer lenth and different temperature at the command line (see ```jobs.sh``` in ```3D``` for an example) and plots average energy vs. temperature and average length vs. temperature.
@@ -53,9 +49,9 @@ We use [SemVer](http://semver.org/) for versioning.
 
 ## Future Work
 
-We hope to add a visual element to the process, allowing for snapshots of the protein folding process to be taken and visually realised, potentially by linking up with other established protein visualisation software. Additionally, research into domain folding may lead to increased computation speed (e.g. adapting from [Abkevich, Gutin and Shakhnovich, 1995](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2143143/) to a more generalised model).
+We hope to add a visual element to the process, allowing for snapshots of the protein folding process to be taken and visually realised, potentially by linking up with other established protein visualisation software. Additionally, research into domain folding may lead to increased computation speed (e.g. adapting from [Abkevich, Gutin and Shakhnovich, (1995)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2143143/) to a more generalised model).
 
-In a later version, we hope to be able to reproduce and improve upon the work of others in this field such as [Sali, Shakhnovich and Karplus, 1994](https://www.nature.com/articles/369248a0).
+In a later version, we hope to be able to reproduce and improve upon the work of others in this field such as [Sali, Shakhnovich and Karplus, (1994)](https://www.nature.com/articles/369248a0).
 
 
 
