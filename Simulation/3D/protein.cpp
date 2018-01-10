@@ -15,7 +15,7 @@ int main(int argc, char *argv[]){
   cout << "Temperature: ";
   cin >> temp;
   char e_type;
-  cout << "Energy matrix ditribution (integer uniform/random uniform/jumps -1,1): "; //enter i/r/j
+  cout << "Energy matrix ditribution (integer uniform/random uniform/jumps -1,1, miyazawa): "; //enter i/r/j/m
   cin >> e_type;
   double range_start;
   double range_end;
@@ -90,6 +90,13 @@ int main(int argc, char *argv[]){
       }
     }
   }
+  if(e_type == 'm'){
+    for(int i = 0; i < 20; i++){
+      for(int j = 0; j < 20; j++){
+	energy_mat[i][j] = miyazawa[i][j] * 8.314; //converting from energy in RT units to kT (with k=1), gas constant R = 8.314 J/(mol*K)
+      }
+    }
+  }
 
   //initialise the random seed to be time
   srand(time(NULL));
@@ -103,22 +110,25 @@ int main(int argc, char *argv[]){
     for(int i = 0; i < pro_len; i++){
       pro_pos[i].x = i;
       pro_pos[i].y = 0;
+      pro_pos[i].z = 0;
     }
   }
   else if(unfolded == 'n'){
     int steps[2] = {-1,1};
     pro_pos[0].x = 0;
     pro_pos[0].y = 0;
+    pro_pos[0].z = 0;
     int d = 1;
     int counter = 0;
     while(d != pro_len){
-      int coord = rand() % 2;
+      int coord = rand() % 3;
       if(coord == 0){
 	int step = rand() % 2;
-	int to_add[2] = {pro_pos[d-1].x+steps[step],pro_pos[d-1].y};
+	int to_add[3] = {pro_pos[d-1].x+steps[step],pro_pos[d-1].y,pro_pos[d-1].z};
 	if(checkList(pro_pos,to_add,d) == -1){
 	  pro_pos[d].x = to_add[0];
 	  pro_pos[d].y = to_add[1];
+	  pro_pos[d].z = to_add[2];
 	  d = d + 1;
 	}
 	else{
@@ -131,10 +141,28 @@ int main(int argc, char *argv[]){
       }
       if(coord == 1){
 	int step = rand() % 2;
-	int to_add[2] = {pro_pos[d-1].x,pro_pos[d-1].y+steps[step]};
+	int to_add[3] = {pro_pos[d-1].x,pro_pos[d-1].y+steps[step],pro_pos[d-1].z};
 	if(checkList(pro_pos,to_add,d) == -1){
 	  pro_pos[d].x = to_add[0];
 	  pro_pos[d].y = to_add[1];
+	  pro_pos[d].z = to_add[2];
+	  d = d + 1;
+	}
+	else{
+	  counter = counter + 1;
+	  if(counter == pro_len * 5){
+	    cout << "time elapsed for random walk\n";
+	    return EXIT_FAILURE;
+	  }
+	}
+      }
+      if(coord == 2){
+	int step = rand() % 2;
+	int to_add[3] = {pro_pos[d-1].x,pro_pos[d-1].y,pro_pos[d-1].z+steps[step]};
+	if(checkList(pro_pos,to_add,d) == -1){
+	  pro_pos[d].x = to_add[0];
+	  pro_pos[d].y = to_add[1];
+	  pro_pos[d].z = to_add[2];
 	  d = d + 1;
 	}
 	else{
@@ -150,7 +178,7 @@ int main(int argc, char *argv[]){
 
   for(int i = 0; i < pro_len; i++){
     cout << "(";
-    cout << pro_pos[i].x << "," << pro_pos[i].y << ")";
+    cout << pro_pos[i].x << "," << pro_pos[i].y << "," << pro_pos[i].z << ")";
   }
   cout << "\n";
 
@@ -173,7 +201,7 @@ int main(int argc, char *argv[]){
   string spro_len = to_string(pro_len);
   string stemp = to_string(temp);
   string filename;
-  if(seeder == 0){
+  if(seeder != 0){
     filename = ("./plotting/seededTis" + stemp + "Lis" + spro_len +  ".csv");
   }
   else{
@@ -189,7 +217,7 @@ int main(int argc, char *argv[]){
     //choose a an amino acid at random
     int randpos = rand() % pro_len;
     cout << "randpos is: " << randpos << "\n";
-    int pro_current[2] = {pro_pos[randpos].x,pro_pos[randpos].y};
+    int pro_current[3] = {pro_pos[randpos].x,pro_pos[randpos].y,pro_pos[randpos].z};
 
     //find, if any, the possible positions the selected amino acid can move to
     vector<vector<int> > vec_possmoves;
@@ -197,7 +225,7 @@ int main(int argc, char *argv[]){
     cout << "poss moves are: ";
     for(int i = 0; i < vec_possmoves.size(); i++){
       cout << "(";
-      for(int j = 0; j < 2; j++){
+      for(int j = 0; j < 3; j++){
 	cout << vec_possmoves[i][j] << ",";
       }
       cout << ")";
@@ -210,7 +238,7 @@ int main(int argc, char *argv[]){
 	cout << "final moves are: ";
 	for(int i = 0; i < vec_finalpossmoves.size(); i++){
 	  cout << "(";
-	  for(int j = 0; j < 2; j++){
+	  for(int j = 0; j < 3; j++){
 	    cout << vec_finalpossmoves[i][j] << ",";
 	  }
 	  cout << ")";
@@ -220,16 +248,18 @@ int main(int argc, char *argv[]){
     
 	//account for more than one possible move
 	int randpos2 = rand() % vec_finalpossmoves.size();
-	int to_move[2];
+	int to_move[3];
 	to_move[0] = vec_finalpossmoves[randpos2][0];
 	to_move[1] = vec_finalpossmoves[randpos2][1];
+	to_move[2] = vec_finalpossmoves[randpos2][2];
 
-	cout << "want to move (" << pro_pos[randpos].x << "," << pro_pos[randpos].y << ") to (" << to_move[0] << "," << to_move[1] << ")\n";
+	cout << "want to move (" << pro_pos[randpos].x << "," << pro_pos[randpos].y << "," <<pro_pos[randpos].z << ") to (" << to_move[0] << "," << to_move[1] << "," << to_move[2] << ")\n";
     
 	//calculate energy difference
 	double init_energy = totalEnergy(pro_structure,pro_pos,pro_len,energy_mat);
 	pro_pos[randpos].x = to_move[0];
 	pro_pos[randpos].y = to_move[1];
+	pro_pos[randpos].z = to_move[2];
 	double deltaE = totalEnergy(pro_structure,pro_pos,pro_len,energy_mat) - init_energy; 
 
 	cout << "energy difference is: " << deltaE << "\n";
@@ -240,7 +270,7 @@ int main(int argc, char *argv[]){
 
 	cout << "moved\n";
 	for(int i = 0; i < pro_len; i++){
-	  cout << "(" << pro_pos[i].x << "," << pro_pos[i].y << ")";
+	  cout << "(" << pro_pos[i].x << "," << pro_pos[i].y << "," << pro_pos[i].z << ")";
 	}
 	cout << "\n";
 
@@ -266,4 +296,3 @@ int main(int argc, char *argv[]){
   outputFile.close();
   return 0;
 }
-

@@ -39,5 +39,7 @@ void doMove(double E_move,struct occupied * occupied,int position,int target[], 
 
 double length(const struct occupied * occupied,int N);
 
+extern double miyazawa[20][20];
+
 #endif
 
