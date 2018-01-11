@@ -8,6 +8,9 @@ int main(int argc, char *argv[]){
   int pro_len;
   cout << "Number of amino acids in protein chain: ";
   cin >> pro_len;
+  string makeup;
+  cout << "Amino acid make up: ";
+  cin >> makeup;
   char unfolded;
   cout << "Initialise an unfolded protein (y/n): ";
   cin >> unfolded;
@@ -35,14 +38,10 @@ int main(int argc, char *argv[]){
   /* initialise the protein structure with numbers 0-19 for the 20
   unique amino acid types */
   int pro_structure[pro_len];
-  for(int a = 0; a < pro_len; a++){
-    int ri = rand() % 20;
-    pro_structure[a] = ri;
-  }
   
   /* initialise the energy matrix with numbers 0-1 for the attaraction
   energies felt between pairs of each of the 20 amino acid types */
-  double energy_mat [20][20];
+  double energy_mat[20][20];
   double number;
   if(e_type == 'i'){
     unsigned seed;
@@ -61,6 +60,10 @@ int main(int argc, char *argv[]){
 	energy_mat[c][b] = number;
       }
     }
+    for(int a = 0; a < pro_len; a++){
+      int ri = rand() % 20;
+      pro_structure[a] = ri;
+    }
   }
   if(e_type == 'j'){
     int sign[2] = {-1,1};
@@ -70,6 +73,10 @@ int main(int argc, char *argv[]){
 	energy_mat[b][c] = number;
 	energy_mat[c][b] = number;
       }
+    }
+    for(int a = 0; a < pro_len; a++){
+      int ri = rand() % 20;
+      pro_structure[a] = ri;
     }
   }
   if(e_type == 'r'){
@@ -89,8 +96,14 @@ int main(int argc, char *argv[]){
 	energy_mat[c][b] = number;
       }
     }
+    for(int a = 0; a < pro_len; a++){
+      int ri = rand() % 20;
+      pro_structure[a] = ri;
+    }
   }
   if(e_type == 'm'){
+    char e_mat_key[20] = {'C','M','F','I','L','V','W','Y','A','G','T','S','Q','N','E','D','H','R','K','P'};
+    checkVariable(makeup,pro_structure,pro_len,e_mat_key);
     for(int i = 0; i < 20; i++){
       for(int j = 0; j < 20; j++){
 	energy_mat[i][j] = miyazawa[i][j] * 8.314; //converting from energy in RT units to kT (with k=1), gas constant R = 8.314 J/(mol*K)

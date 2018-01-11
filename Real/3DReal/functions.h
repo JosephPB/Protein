@@ -19,7 +19,7 @@
 
 using namespace std;
 
-struct occupied {
+struct occupied{
   int x;
   int y;
   int z;
@@ -28,6 +28,8 @@ struct occupied {
 int checkList(const struct occupied * vec,int vbl[],int N);
 
 int checkStruct(const struct occupied * vec, const struct occupied vbl, int N);
+
+void checkVariable(string makeup, int structure[],int N, char key[]);
 
 double totalEnergy(int structure[],const struct occupied * occupied,int N,double J[20][20]);
 

@@ -12,7 +12,7 @@ int checkList(const struct occupied * vec,int vbl[],int N){
   return is_in;
 }
 
-int checkStruct(const struct occupied * vec, const struct occupied vbl, int N){
+int checkStruct(const struct occupied * vec,const struct occupied vbl,int N){
   //check a struct is in an array of structs and updates an array with their positions
   int is_in = -1;
   for(int i = 0; i < N; i++){
@@ -22,6 +22,16 @@ int checkStruct(const struct occupied * vec, const struct occupied vbl, int N){
     }
   }
   return is_in;
+}
+
+void checkVariable(string makeup, int structure[],int N, char key[]){
+  for(int i = 0; i < N; i++){
+    for(int j = 0; j < 20; j++){
+      if (makeup[i] == key[j]){
+	structure[i] = j;
+      }
+    }
+  } 
 }
 
 double totalEnergy(int structure[],const struct occupied * occupied,int N,double J[20][20]){
