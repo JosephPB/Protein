@@ -4,6 +4,8 @@ example input: pythonw plotavg.py seededTis1Lis30.csv seededTis2Lis30.csv seeded
 import matplotlib.pyplot as plt
 import csv
 import sys
+import numpy as np
+from scipy.optimize import curve_fit
 
 arr_temp = []
 arr_energy = []
@@ -33,25 +35,25 @@ for i in range(len(sys.argv)-1):
     del length[0]
 
     #convert the strings to numbers
-    for i in range(len(time)):
-        time[i] = int(time[i])
+    for j in range(len(time)):
+        time[j] = int(time[j])
 
-    for i in range(len(energy)):
-        energy[i] = float(energy[i])
+    for j in range(len(energy)):
+        energy[j] = float(energy[j])
 
-    for i in range(len(length)):
-        length[i] = float(length[i])
+    for j in range(len(length)):
+        length[j] = float(length[j])
 
     
     #average energies and lengths
     avgE = 0
-    for i in energy:
-        avgE += i
+    for j in energy:
+        avgE += j
     avgE = avgE / len(energy)
 
     avgL = 0
-    for i in length:
-        avgL += i
+    for j in length:
+        avgL += j
     avgL = avgL / len(length)
 
     arr_temp.append(int(temperature))
@@ -60,18 +62,21 @@ for i in range(len(sys.argv)-1):
 
 #plot graphs    
 
-f = plt.figure(1)
-plt.plot(arr_temp,arr_energy,'ro',lw = 0.5)
-plt.xlabel("Temperature")
-plt.ylabel("Energy")
-plt.title("Energy vs. Temperature")
 
-f.savefig("Averaged Energy.jpg", dpi = 200)
+fig, ax1 = plt.subplots()
+ax1.scatter(arr_temp, arr_energy, s=60, c='blue', label = "Energy")
+ax1.set_ylabel(r"Energy ($k_BT$)", fontsize=15)
+ax1.set_xlabel(r"Temperature", fontsize=15)
+ax1.set_xlim((0,20.5))
 
-g = plt.figure(2)
-plt.plot(arr_temp,arr_length,'ro',lw = 0.5)
-plt.xlabel("Temperature")
-plt.ylabel("Length")
-plt.title("Length vs. Temperature")
+ax2 = ax1.twinx()
+ax2.scatter(arr_temp, arr_length, s=60, c='red', label = "Length")
+ax2.set_ylabel(r"Length", fontsize=15)
+ax2.set_xlim((0,20.5))
 
-g.savefig("Averaged Length.jpg", dpi = 200)
+lines, labels = ax1.get_legend_handles_labels()
+lines2, labels2 = ax2.get_legend_handles_labels()
+ax2.legend(lines + lines2, labels + labels2, loc='upper left')
+
+
+fig.savefig("Averaged.pdf", format='pdf')

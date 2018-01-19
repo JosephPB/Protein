@@ -4,6 +4,9 @@ int main(int argc, char *argv[]){
   
   cout << fixed;
   cout << setprecision(8);
+
+  //allowed amino acid codes
+  char e_mat_key[20] = {'C','M','F','I','L','V','W','Y','A','G','T','S','Q','N','E','D','H','R','K','P'};
   
   int pro_len;
   cout << "Number of amino acids in protein chain: ";
@@ -11,6 +14,9 @@ int main(int argc, char *argv[]){
   string makeup;
   cout << "Amino acid make up: ";
   cin >> makeup;
+  for(int z = 0; z < pro_len; z++){
+    
+  }
   char unfolded;
   cout << "Initialise an unfolded protein (y/n): ";
   cin >> unfolded;
@@ -102,7 +108,6 @@ int main(int argc, char *argv[]){
     }
   }
   if(e_type == 'm'){
-    char e_mat_key[20] = {'C','M','F','I','L','V','W','Y','A','G','T','S','Q','N','E','D','H','R','K','P'};
     checkVariable(makeup,pro_structure,pro_len,e_mat_key);
     for(int i = 0; i < 20; i++){
       for(int j = 0; j < 20; j++){

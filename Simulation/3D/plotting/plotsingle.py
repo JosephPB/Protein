@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
+from matplotlib import ticker
 import csv
 import sys
+import numpy as np
 
 time = []
 energy = []
@@ -36,18 +38,22 @@ for i in range(len(length)):
 
 #plot graphs
 
-plt.plot(time,energy, ls = '-', lw = 0.5)
-plt.ylabel("Energy")
-plt.title("T = {}, Chain Length = {}".format(temperature,chain))
+fig, ax1 = plt.subplots()
+lns1 = ax1.plot(time, energy, lw=0.5, color="blue", label = "Energy")
+ax1.set_ylabel(r"Energy ($k_BT$)", fontsize=15)
+scale_pow = -5
+def my_formatter_fun(x, p):
+    return "%i" % (x * (10 ** scale_pow))
+ax1.get_xaxis().set_major_formatter(ticker.FuncFormatter(my_formatter_fun))
+ax1.set_xlabel('Monte Carlo Time Steps' + ' (x$10^5$)', fontsize=15)
 
-plt.show()
+    
+ax2 = ax1.twinx()
+lns2 = ax2.plot(time, length, lw=0.5, color="red", label = "Length")
+ax2.set_ylabel(r"Length", fontsize=15)
 
-plt.plot(time,length, ls = '-', lw = 0.1)
-plt.xlabel(r'Monte Carlo time steps')
-plt.ylabel("Length")
+lns = lns1+lns2
+labs = [l.get_label() for l in lns]
+ax1.legend(lns, labs, loc="upper right")
 
-plt.show()
-
-#fig.savefig("T{}, L{}.jpg".format(temperature,chain),dpi = 200)
-
-
+fig.savefig("T{}, L{}.pdf".format(temperature,chain),format='pdf')
