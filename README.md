@@ -31,7 +31,7 @@ The parameters are as follows:
   1. ```Number of amino acids```: this is the monomer chain length desired
   2. ```Initialise unfolded protein```: ```y``` generates a totally unfolded (straight), ```n``` gives a protein produced by a non-crossing random walk beginning at the origin
   3. ```Temperature```: the temperature of the solution in arbitrary units (Boltzman factor, k = 1)
-  4. ```Energy matrix```: ```i``` fills the 20x20 symmetric interaction matrix with a integer values from a uniform distribution between limits to be defined, ```r``` fills it with ```double``` values from a uniform distribution, ```j``` places at each element a ```1``` or a ```-1``` at random, and ```m``` fills the matrix with the values found in [Miyazawa and Jernigan (1985)](https://pubs.acs.org/doi/abs/10.1021/ma00145a039)
+  4. ```Energy matrix```: ```i``` fills the 20x20 symmetric interaction matrix with a integer values from a uniform distribution between limits to be defined, ```r``` fills it with ```double``` values from a uniform distribution, ```j``` places at each element a ```1``` or a ```-1``` at random, and ```m``` fills the matrix with the values found in [Miyazawa and Jernigan (1985), Table VI](https://pubs.acs.org/doi/abs/10.1021/ma00145a039)
   5. (if selected ```i``` or ```r``` at step 4) ```Range```: specify the range of the distribution
   6. ```Number of time steps```: the number of times the programme will go through it's folding computation (measured in Monte Carlo time)
   7. ```Seed```: the seed value for all random number generators used in initialising the protein, ```0``` given ```time``` as a seed
