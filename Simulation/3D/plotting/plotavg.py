@@ -10,6 +10,7 @@ from scipy.optimize import curve_fit
 arr_temp = []
 arr_energy = []
 arr_length = []
+arr_error = []
 
 for i in range(len(sys.argv)-1):
     time = []
@@ -60,11 +61,20 @@ for i in range(len(sys.argv)-1):
     arr_energy.append(avgE)
     arr_length.append(avgL)
 
+    #errors
+    Evar = 0
+    for j in energy:
+        Evar += (j-avgE)**2
+    Eerror = (Evar/(len(energy)-1))**0.5
+    arr_error.append(Eerror)
+    
 #plot graphs    
 
+print (min(arr_error))
+print (max(arr_error))
 
 fig, ax1 = plt.subplots()
-ax1.scatter(arr_temp, arr_energy, s=60, c='blue', label = "Energy")
+ax1.scatter(arr_temp, arr_energy, s=60, c= 'blue', label = "Energy")
 ax1.set_ylabel(r"Energy ($k_BT$)", fontsize=15)
 ax1.set_xlabel(r"Temperature", fontsize=15)
 ax1.set_xlim((0,20.5))
