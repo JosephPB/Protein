@@ -4,6 +4,9 @@ Proteins fold into biologically 'active' states which allow them to perform impo
 
 This model simulates the folding of a randomly generated protein, given certain input parameters (length, temperature of solution, interaction energies etc.) on an infinite lattice.
 
+## Documentation
+For more information on the background, references and an application of this programme see the paper ```A Lattice Simulation Approach to Protein Folding```.
+
 ## Getting Started
 
 Clone the repository:
@@ -11,7 +14,7 @@ Clone the repository:
 git clone https://github.com/JosephPB/Protein
 ```
 
-The files are divided into directories depending on your requirements. The ```2D``` directory contains a verion of the programme which runs on an infinite 2D lattice, and equivalently for the ```3D``` directory. If you have access to a bbatch system the ```batch``` directory is set up to run such a programme with modifications. On a batch system change the ```batch.sh``` shell file and the destination of the write file ```/mt/batch/...``` to your appropriate values.
+The files are divided into directories depending on your requirements. The ```Real``` directory contains scripts which allow the user to input the exact amino acid make up and order of the amino acids by hand. The ```Simulation``` directory contains scripts which do not require amino acid type user input, and instead will randomly generate a protein. Inside these two directories are ```2D``` and ```3D``` directories that contains a verion of the programme which runs on an infinite 2D lattice, and equivalently for the ```3D``` directory. If you have access to a batch system the ```batch``` directory is set up to run such a programme with modifications. On a batch system change the ```batch.sh``` shell file and the destination of the write file ```/mt/batch/...``` to your appropriate values.
 
 ## Running the programme
 
@@ -28,7 +31,7 @@ The parameters are as follows:
   1. ```Number of amino acids```: this is the monomer chain length desired
   2. ```Initialise unfolded protein```: ```y``` generates a totally unfolded (straight), ```n``` gives a protein produced by a non-crossing random walk beginning at the origin
   3. ```Temperature```: the temperature of the solution in arbitrary units (Boltzman factor, k = 1)
-  4. ```Energy matrix```: ```i``` fills the 20x20 symmetric interaction matrix with a integer values from a uniform distribution between limits to be defined, ```r``` fills it with ```double``` values from a uniform distribution, and ```j``` places at each element a ```1``` or a ```-1``` at random
+  4. ```Energy matrix```: ```i``` fills the 20x20 symmetric interaction matrix with a integer values from a uniform distribution between limits to be defined, ```r``` fills it with ```double``` values from a uniform distribution, ```j``` places at each element a ```1``` or a ```-1``` at random, and ```m``` fills the matrix with the values found in [Miyazawa and Jernigan (1985)](https://pubs.acs.org/doi/abs/10.1021/ma00145a039)
   5. (if selected ```i``` or ```r``` at step 4) ```Range```: specify the range of the distribution
   6. ```Number of time steps```: the number of times the programme will go through it's folding computation (measured in Monte Carlo time)
   7. ```Seed```: the seed value for all random number generators used in initialising the protein, ```0``` given ```time``` as a seed
@@ -46,6 +49,8 @@ plotsingle.py <filename.csv>
 and plots energy vs. Monte Carlo time and lenth vs. Monte Carlo time.
 
 Similarly ```plotavg.py``` takes multiple file inputs, of the same monomer lenth and different temperature at the command line (see ```jobs.sh``` in ```3D``` for an example) and plots average energy vs. temperature and average length vs. temperature.
+
+Additionally, ```plotmult.py``` takes in multiple runs at three different temperatures and creates a three tiered subplot for comparison.
 
 ## Versioning
 
