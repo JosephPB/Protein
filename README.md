@@ -5,7 +5,7 @@ Proteins fold into biologically 'active' states which allow them to perform impo
 This model simulates the folding of a randomly generated protein, given certain input parameters (length, temperature of solution, interaction energies etc.) on an infinite lattice.
 
 ## Documentation
-For more information on the background, references and an application of this programme see the paper ```A Lattice Simulation Approach to Protein Folding```.
+For more information on the background, references and an application of this programme see the paper ```A Lattice Simulation Approach to Protein Folding.pdf```.
 
 ## Getting Started
 
